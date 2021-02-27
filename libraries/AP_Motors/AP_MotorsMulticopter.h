@@ -77,7 +77,7 @@ public:
     virtual void        output_motor_mask(float thrust, uint8_t mask, float rudder_dt);
 
     // New line for AerTilt
-    virtual void        output_motor_mask_aer(float thrust_frontLeft, float thrust_frontRight, float thrust_BackLeft, float thrust_backRight, uint8_t mask, float rudder_dt);
+    // virtual void        output_motor_mask_aer(float thrust_frontLeft, float thrust_frontRight, float thrust_BackLeft, float thrust_backRight, uint8_t mask, float rudder_dt);
 
     // get_motor_mask - returns a bitmask of which outputs are being used for motors (1 means being used)
     //  this can be used to ensure other pwm outputs (i.e. for servos) do not conflict
