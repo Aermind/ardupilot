@@ -362,8 +362,7 @@ void QuadPlane::tiltrotor_vectored_yaw(void)
     } else {
         float yaw_out = motors->get_yaw();
         float yaw_range = zero_out;
-        // AerTilt test (new line below)
-
+        
         SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorLeft,  1000 * (base_output + yaw_out * yaw_range));
         SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorRight, 1000 * (base_output - yaw_out * yaw_range));
     }
