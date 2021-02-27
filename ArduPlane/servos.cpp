@@ -612,6 +612,7 @@ void Plane::servo_output_mixers(void)
 /*
   support for twin-engine planes
  */
+
 void Plane::servos_twin_engine_mix(void)
 {
     float throttle = SRV_Channels::get_output_scaled(SRV_Channel::k_throttle);
@@ -653,7 +654,6 @@ void Plane::servos_twin_engine_mix(void)
         throttle_slew_limit(SRV_Channel::k_throttleRight);
     }
 }
-
 
 /*
   Set the flight control servos based on the current calculated values
