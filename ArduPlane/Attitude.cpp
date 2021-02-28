@@ -46,6 +46,9 @@ float Plane::get_speed_scaler(void)
         // no speed estimate and not armed, use a unit scaling
         speed_scaler = 1;
     }
+
+    speed_scaler = 1.00f    ///< AerTilt
+
     return speed_scaler;
 }
 

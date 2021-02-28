@@ -237,6 +237,9 @@ void QuadPlane::tilt_compensate_down(float *thrust, uint8_t num_motors)
     float tilt_threshold = (tilt.max_angle_deg/90.0f);
     bool equal_thrust = (tilt.current_tilt > tilt_threshold);
 
+    inv_tilt_factor = 1.0f;   ///< AerTilt
+    equal_thrust = false;     ///< AerTilt
+
     float tilt_total = 0;
     uint8_t tilt_count = 0;
     
@@ -287,6 +290,9 @@ void QuadPlane::tilt_compensate_up(float *thrust, uint8_t num_motors)
     // of the last phase of transitions
     float tilt_threshold = (tilt.max_angle_deg/90.0f);
     bool equal_thrust = (tilt.current_tilt > tilt_threshold);
+
+    tilt_factor = 1.0f;       ///< AerTilt
+    equal_thrust = false;     ///< AerTilt
 
     float tilt_total = 0;
     uint8_t tilt_count = 0;
@@ -344,6 +350,8 @@ bool QuadPlane::tiltrotor_fully_fwd(void)
 /*
   control vectored yaw with tilt multicopters
  */
+
+/*
 void QuadPlane::tiltrotor_vectored_yaw(void)
 {
     // total angle the tilt can go through
@@ -365,6 +373,51 @@ void QuadPlane::tiltrotor_vectored_yaw(void)
         
         SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorLeft,  1000 * (base_output + yaw_out * yaw_range));
         SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorRight, 1000 * (base_output - yaw_out * yaw_range));
+    }
+}
+*/
+
+// Copied and modified block for AerTilt
+void QuadPlane::tiltrotor_vectored_yaw(void)
+{
+    // total angle the tilt can go through
+    float total_angle = 90 + 2 * tilt.tilt_yaw_angle;
+    // output value (0 to 1) to get motors pointed straight up
+    float zero_out = tilt.tilt_yaw_angle / total_angle;
+
+    // calculate the basic tilt amount from current_tilt
+    float base_output = zero_out + tilt.current_tilt * (1 - 2 * zero_out);
+
+    float tilt_threshold = (tilt.max_angle_deg / 90.0f);
+    bool no_yaw = (tilt.current_tilt > tilt_threshold);
+    if (no_yaw) {
+        // In forward flight
+        // Must assign k_elevon_left and k_elevon_right to an unused servo (e.g. servo 15 and 16)
+        float elevon_left = SRV_Channels::get_output_norm(SRV_Channel::k_elevon_left);
+        float elevon_right = SRV_Channels::get_output_norm(SRV_Channel::k_elevon_right);
+        float elevon_range = zero_out;
+
+        SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorLeft, 1000 * base_output);
+        SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorRight, 1000 * base_output);
+        SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorFrontLeft, 1000 * (base_output - elevon_right * elevon_range));
+        SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorFrontRight, 1000 * (base_output - elevon_left * elevon_range));
+        SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorBackLeft, 1000 * (base_output + elevon_left * elevon_range));
+        SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorBackRight, 1000 * (base_output + elevon_right * elevon_range));
+    }
+    else {
+        // In hover
+        float yaw_out = motors->get_yaw();
+        float yaw_range = zero_out;
+
+        SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorLeft, 1000 * (base_output + yaw_out * yaw_range));
+        SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorRight, 1000 * (base_output - yaw_out * yaw_range));
+        SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorFrontLeft, 1000 * (base_output + yaw_out * yaw_range));
+        SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorFrontRight, 1000 * (base_output - yaw_out * yaw_range));
+        SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorBackLeft, 1000 * (base_output + yaw_out * yaw_range));
+        SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorBackRight, 1000 * (base_output - yaw_out * yaw_range));
+
+        motors->set_yaw(0);
+        motors->output();
     }
 }
 
