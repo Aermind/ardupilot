@@ -47,7 +47,7 @@ float Plane::get_speed_scaler(void)
         speed_scaler = 1;
     }
 
-    speed_scaler = 1.00f    ///< AerTilt
+    speed_scaler = 1.00f;    ///< AerTilt
 
     return speed_scaler;
 }
