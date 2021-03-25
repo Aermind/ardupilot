@@ -334,7 +334,6 @@ void QuadPlane::tilt_compensate(float *thrust, uint8_t num_motors)
     } else {
         tilt_compensate_down(thrust, num_motors);
     }
-    thrust[1] = 0;
 }
 
 /*
