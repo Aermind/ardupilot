@@ -739,30 +739,30 @@ void AP_MotorsMulticopter::output_motor_mask(float thrust, uint8_t mask, float r
                 /*
                  apply rudder mixing differential thrust
                  copter frame roll is plane frame yaw as this only
-                 apples to either tilted motors or tailsitters
+                 applies to either tilted motors or tailsitters
                  */
 
                  // AerTilt until...
+                float aer_rudder_dt;
                 float flaps;
                 if (i == 1 || i == 3) {
                     flaps = (1.0f - SRV_Channels::get_output_norm(SRV_Channel::k_flap)) / 2.0f;
                     if (i == 3) {
-                        rudder_dt *= SRV_Channels::get_output_norm(SRV_Channel::k_vtail_right);
+                        aer_rudder_dt = rudder_dt * SRV_Channels::get_output_norm(SRV_Channel::k_vtail_right);
                     } else {
-                        rudder_dt *= SRV_Channels::get_output_norm(SRV_Channel::k_vtail_left);
+                        aer_rudder_dt = rudder_dt * SRV_Channels::get_output_norm(SRV_Channel::k_vtail_left);
                     }
                 } else {
                     flaps = 1.0f;
                     if (i == 0) {
-                        rudder_dt *= SRV_Channels::get_output_norm(SRV_Channel::k_vtail_right);
+                        aer_rudder_dt = rudder_dt * SRV_Channels::get_output_norm(SRV_Channel::k_vtail_right);
                     } else {
-                        rudder_dt *= SRV_Channels::get_output_norm(SRV_Channel::k_vtail_left);
+                        aer_rudder_dt = rudder_dt * SRV_Channels::get_output_norm(SRV_Channel::k_vtail_left);
                     }
                 }
                 // ...here, AerTilt
 
-                //float diff_thrust = get_roll_factor(i) * rudder_dt * 0.5f;
-                float diff_thrust = rudder_dt; ///< AerTilt
+                float diff_thrust = get_roll_factor(i) * aer_rudder_dt * 0.5f; ///< AerTilt
                 set_actuator_with_slew(_actuator[i], thrust_to_actuator(thrust + diff_thrust));
                 int16_t pwm_output = get_pwm_output_min() + (get_pwm_output_max() - get_pwm_output_min()) * _actuator[i] * flaps; ///< AerTilt
                 rc_write(i, pwm_output);
