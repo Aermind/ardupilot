@@ -748,9 +748,9 @@ void AP_MotorsMulticopter::output_motor_mask(float thrust, uint8_t mask, float r
                 if (i == 1 || i == 3) {
                     flaps = (1.0f - SRV_Channels::get_output_norm(SRV_Channel::k_flap)) / 2.0f;
                     if (i == 3) {
-                        aer_rudder_dt = rudder_dt * SRV_Channels::get_output_norm(SRV_Channel::k_vtail_right);
+                        aer_rudder_dt = -rudder_dt * SRV_Channels::get_output_norm(SRV_Channel::k_vtail_left);
                     } else {
-                        aer_rudder_dt = rudder_dt * SRV_Channels::get_output_norm(SRV_Channel::k_vtail_left);
+                        aer_rudder_dt = -rudder_dt * SRV_Channels::get_output_norm(SRV_Channel::k_vtail_right);
                     }
                 } else {
                     flaps = 1.0f;
