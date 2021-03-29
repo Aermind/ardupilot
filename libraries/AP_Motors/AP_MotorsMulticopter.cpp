@@ -763,7 +763,7 @@ void AP_MotorsMulticopter::output_motor_mask(float thrust, uint8_t mask, float r
                 // ...here, AerTilt
 
                 // float diff_thrust = get_roll_factor(i) * rudder_dt * 0.5f;
-                float diff_thrust = aer_rudder_dt; ///< AerTilt
+                float diff_thrust = aer_rudder_dt * 0.5f; ///< AerTilt
                 set_actuator_with_slew(_actuator[i], thrust_to_actuator(thrust + diff_thrust));
                 // int16_t pwm_output = get_pwm_output_min() + (get_pwm_output_max() - get_pwm_output_min()) * _actuator[i];
                 int16_t pwm_output = get_pwm_output_min() + (get_pwm_output_max() - get_pwm_output_min()) * _actuator[i] * flaps; ///< AerTilt
