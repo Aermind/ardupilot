@@ -741,12 +741,27 @@ void AP_MotorsMulticopter::output_motor_mask(float thrust, uint8_t mask, float r
                  copter frame roll is plane frame yaw as this only
                  apples to either tilted motors or tailsitters
                  */
-                float flaps; ///< AerTilt
+
+                 // AerTilt until...
+                float rud_gain = float(plane.g2.rudd_dt_gain) / 100;
+                float flaps;
                 if (i == 1 || i == 3) {
                     flaps = (1.0f - SRV_Channels::get_output_norm(SRV_Channel::k_flap)) / 2.0f;
+                    if (i == 3) {
+                        rudder_dt = rud_gain * SRV_Channels::get_output_scaled(SRV_Channel::k_vtail_right) / float(SERVO_MAX);
+                    } else {
+                        rudder_dt = rud_gain * SRV_Channels::get_output_scaled(SRV_Channel::k_vtail_left) / float(SERVO_MAX);
+                    }
                 } else {
                     flaps = 1.0f;
+                    if (i == 0) {
+                        rudder_dt = rud_gain * SRV_Channels::get_output_scaled(SRV_Channel::k_vtail_right) / float(SERVO_MAX);
+                    } else {
+                        rudder_dt = rud_gain * SRV_Channels::get_output_scaled(SRV_Channel::k_vtail_left) / float(SERVO_MAX);
+                    }
                 }
+                // ...here, AerTilt
+
                 float diff_thrust = get_roll_factor(i) * rudder_dt * 0.5f;
                 set_actuator_with_slew(_actuator[i], thrust_to_actuator(thrust + diff_thrust));
                 int16_t pwm_output = get_pwm_output_min() + (get_pwm_output_max() - get_pwm_output_min()) * _actuator[i] * flaps; ///< AerTilt
