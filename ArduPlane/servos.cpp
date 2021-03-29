@@ -617,7 +617,8 @@ void Plane::servos_twin_engine_mix(void)
 {
     float throttle = SRV_Channels::get_output_scaled(SRV_Channel::k_throttle);
     float rud_gain = float(plane.g2.rudd_dt_gain) / 100;
-    rudder_dt = rud_gain * SRV_Channels::get_output_scaled(SRV_Channel::k_rudder) / float(SERVO_MAX);
+    // rudder_dt = rud_gain * SRV_Channels::get_output_scaled(SRV_Channel::k_rudder) / float(SERVO_MAX);
+    rudder_dt = rud_gain; ///< AerTilt
 
 #if ADVANCED_FAILSAFE == ENABLED
     if (afs.should_crash_vehicle()) {
