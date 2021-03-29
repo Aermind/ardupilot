@@ -743,21 +743,20 @@ void AP_MotorsMulticopter::output_motor_mask(float thrust, uint8_t mask, float r
                  */
 
                  // AerTilt until...
-                float rud_gain = float(plane.g2.rudd_dt_gain) / 100;
-                float flaps;
+                float flaps = 1.0f;
+                rudder_dt = rudder_dt / (SRV_Channels::get_output_scaled(SRV_Channel::k_rudder) / float(SERVO_MAX))
                 if (i == 1 || i == 3) {
                     flaps = (1.0f - SRV_Channels::get_output_norm(SRV_Channel::k_flap)) / 2.0f;
                     if (i == 3) {
-                        rudder_dt = rud_gain * SRV_Channels::get_output_scaled(SRV_Channel::k_vtail_right) / float(SERVO_MAX);
+                        rudder_dt *= SRV_Channels::get_output_scaled(SRV_Channel::k_vtail_right) / float(SERVO_MAX);
                     } else {
-                        rudder_dt = rud_gain * SRV_Channels::get_output_scaled(SRV_Channel::k_vtail_left) / float(SERVO_MAX);
+                        rudder_dt *= SRV_Channels::get_output_scaled(SRV_Channel::k_vtail_left) / float(SERVO_MAX);
                     }
                 } else {
-                    flaps = 1.0f;
                     if (i == 0) {
-                        rudder_dt = rud_gain * SRV_Channels::get_output_scaled(SRV_Channel::k_vtail_right) / float(SERVO_MAX);
+                        rudder_dt *= SRV_Channels::get_output_scaled(SRV_Channel::k_vtail_right) / float(SERVO_MAX);
                     } else {
-                        rudder_dt = rud_gain * SRV_Channels::get_output_scaled(SRV_Channel::k_vtail_left) / float(SERVO_MAX);
+                        rudder_dt *= SRV_Channels::get_output_scaled(SRV_Channel::k_vtail_left) / float(SERVO_MAX);
                     }
                 }
                 // ...here, AerTilt
