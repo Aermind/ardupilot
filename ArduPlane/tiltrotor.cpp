@@ -409,8 +409,8 @@ void QuadPlane::tiltrotor_vectored_yaw(void)
         float lean_out = SRV_Channels::get_output_norm(SRV_Channel::k_rcin8);
         float lean_range = 90.0f / total_angle;
 
-        float pitch_out = motors->get_pitch();
-        float pitch_range = zero_out;
+        //float pitch_out = motors->get_pitch();
+        //float pitch_range = zero_out;
 
         float yaw_out = motors->get_yaw();
         //float yaw_range = zero_out * (1.0 - fabsf(pitch_out));
