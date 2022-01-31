@@ -19,7 +19,8 @@ void ModeQStabilize::update()
 {
     // set nav_roll and nav_pitch using sticks
     int16_t roll_limit = MIN(plane.roll_limit_cd, plane.quadplane.aparm.angle_max);
-    float pitch_input = 0.0; // plane.channel_pitch->norm_input(); ///< For AerTilt
+    float aertilt_lean = SRV_Channels::get_output_norm(SRV_Channel::k_rcin8); ///< For AerTilt
+    float pitch_input = -aertilt_lean * 90.0f; // plane.channel_pitch->norm_input(); ///< For AerTilt
     // Scale from normalized input [-1,1] to centidegrees
     if (plane.quadplane.tailsitter_active()) {
         // separate limit for tailsitter roll, if set

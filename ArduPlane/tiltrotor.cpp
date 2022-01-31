@@ -435,8 +435,6 @@ void QuadPlane::tiltrotor_vectored_yaw(void)
         //SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorBackLeft, 1000 * (base_output + yaw_out * yaw_range));
         //SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorBackRight, 1000 * (base_output - yaw_out * yaw_range));
 
-        ahrs.update_orientation();
-
         //motors->set_pitch(0);
         motors->set_yaw(0);
         motors->output();
