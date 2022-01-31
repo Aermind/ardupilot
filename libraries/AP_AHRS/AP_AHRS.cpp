@@ -226,6 +226,7 @@ void AP_AHRS::add_trim(float roll_in_radians, float pitch_in_radians, bool save_
     }
 }
 
+/* Commented out for AerTilt from here...
 // Set the board mounting orientation, may be called while disarmed
 void AP_AHRS::update_orientation()
 {
@@ -243,6 +244,28 @@ void AP_AHRS::update_orientation()
         }
     }
 }
+...to here AerTilt */ 
+
+// Modified block for AerTilt from here...
+void AP_AHRS::update_orientation()
+{
+    const enum Rotation orientation = (enum Rotation)_board_orientation.get();
+    if (orientation != ROTATION_CUSTOM) {
+        AP::ins().set_board_orientation(orientation);
+        if (_compass != nullptr) {
+            _compass->set_board_orientation(orientation);
+        }
+    }
+    else {
+        float aertilt_lean = SRV_Channels::get_output_norm(SRV_Channel::k_rcin8);
+        _custom_rotation.from_euler(radians(_custom_roll), radians(_custom_pitch - aertilt_lean * 90.0f), radians(_custom_yaw));
+        AP::ins().set_board_orientation(orientation, &_custom_rotation);
+        if (_compass != nullptr) {
+            _compass->set_board_orientation(orientation, &_custom_rotation);
+        }
+    }
+}
+// ... to here AerTilt
 
 // return a ground speed estimate in m/s
 Vector2f AP_AHRS::groundspeed_vector(void)
