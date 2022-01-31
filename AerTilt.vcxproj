@@ -276,6 +276,10 @@
     <ClCompile Include="libraries\AC_AttitudeControl\AC_PosControl.cpp" />
     <ClCompile Include="libraries\AC_AttitudeControl\AC_PosControl_Sub.cpp" />
     <ClCompile Include="libraries\AC_AttitudeControl\ControlMonitor.cpp" />
+    <ClCompile Include="libraries\AP_AHRS\AP_AHRS.cpp" />
+    <ClCompile Include="libraries\AP_AHRS\AP_AHRS_DCM.cpp" />
+    <ClCompile Include="libraries\AP_AHRS\AP_AHRS_NavEKF.cpp" />
+    <ClCompile Include="libraries\AP_AHRS\AP_AHRS_View.cpp" />
     <ClCompile Include="libraries\AP_HAL\Device.cpp" />
     <ClCompile Include="libraries\AP_HAL\HAL.cpp" />
     <ClCompile Include="libraries\AP_HAL\RCOutput.cpp" />
@@ -343,6 +347,10 @@
     <ClInclude Include="libraries\AC_AttitudeControl\AC_AttitudeControl_Sub.h" />
     <ClInclude Include="libraries\AC_AttitudeControl\AC_PosControl.h" />
     <ClInclude Include="libraries\AC_AttitudeControl\AC_PosControl_Sub.h" />
+    <ClInclude Include="libraries\AP_AHRS\AP_AHRS.h" />
+    <ClInclude Include="libraries\AP_AHRS\AP_AHRS_DCM.h" />
+    <ClInclude Include="libraries\AP_AHRS\AP_AHRS_NavEKF.h" />
+    <ClInclude Include="libraries\AP_AHRS\AP_AHRS_View.h" />
     <ClInclude Include="libraries\AP_HAL\AnalogIn.h" />
     <ClInclude Include="libraries\AP_HAL\AP_HAL.h" />
     <ClInclude Include="libraries\AP_HAL\AP_HAL_Boards.h" />

@@ -22,6 +22,9 @@
     <Filter Include="libraries\SRV_Channel">
       <UniqueIdentifier>{ec5a1a79-1966-43ee-87c3-ac268fff18ff}</UniqueIdentifier>
     </Filter>
+    <Filter Include="libraries\AP_AHRS">
+      <UniqueIdentifier>{f0080bf7-bfda-41f3-a05d-428183bebe29}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ArduPlane\afs_plane.cpp">
@@ -513,6 +516,18 @@
     <ClCompile Include="libraries\SRV_Channel\SRV_Channels.cpp">
       <Filter>libraries\SRV_Channel</Filter>
     </ClCompile>
+    <ClCompile Include="libraries\AP_AHRS\AP_AHRS.cpp">
+      <Filter>libraries\AP_AHRS</Filter>
+    </ClCompile>
+    <ClCompile Include="libraries\AP_AHRS\AP_AHRS_DCM.cpp">
+      <Filter>libraries\AP_AHRS</Filter>
+    </ClCompile>
+    <ClCompile Include="libraries\AP_AHRS\AP_AHRS_NavEKF.cpp">
+      <Filter>libraries\AP_AHRS</Filter>
+    </ClCompile>
+    <ClCompile Include="libraries\AP_AHRS\AP_AHRS_View.cpp">
+      <Filter>libraries\AP_AHRS</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArduPlane\afs_plane.h">
@@ -748,6 +763,18 @@
     </ClInclude>
     <ClInclude Include="libraries\SRV_Channel\SRV_Channel.h">
       <Filter>libraries\SRV_Channel</Filter>
+    </ClInclude>
+    <ClInclude Include="libraries\AP_AHRS\AP_AHRS.h">
+      <Filter>libraries\AP_AHRS</Filter>
+    </ClInclude>
+    <ClInclude Include="libraries\AP_AHRS\AP_AHRS_DCM.h">
+      <Filter>libraries\AP_AHRS</Filter>
+    </ClInclude>
+    <ClInclude Include="libraries\AP_AHRS\AP_AHRS_NavEKF.h">
+      <Filter>libraries\AP_AHRS</Filter>
+    </ClInclude>
+    <ClInclude Include="libraries\AP_AHRS\AP_AHRS_View.h">
+      <Filter>libraries\AP_AHRS</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
