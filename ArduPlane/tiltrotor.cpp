@@ -407,17 +407,28 @@ void QuadPlane::tiltrotor_vectored_yaw(void)
     else {
         // In hover
         float lean_out = SRV_Channels::get_output_norm(SRV_Channel::k_rcin8);
-        float lean_range = plane.quadplane.aparm.angle_max * 0.01f / total_angle;
+        float lean_max_angle_deg = plane.quadplane.aparm.angle_max * 0.01f;
+        float lean_range = lean_max_angle_deg / total_angle;
+        float lean_angle_deg = (lean_out * lean_max_angle_deg) -15.0;
+
+        float pitch_out = motors->get_pitch() * sinf(radians(lean_angle_deg));
+        float pitch_range = zero_out;
+
+        float yaw_out = motors->get_yaw();
+        float yaw_range = zero_out;
 
         float drive_out = plane.channel_pitch->norm_input();
         float drive_range = zero_out;
 
-        //float pitch_out = motors->get_pitch();
-        //float pitch_range = zero_out;
+        if ((fabsf(pitch_out) + fabsf(drive_out) + fabsf(yaw_out)) > 1.0) {
+            
+            float aer_scalar = 1.0f / (fabsf(pitch_out) + fabsf(drive_out) + fabsf(yaw_out));
 
-        float yaw_out = motors->get_yaw();
-        //float yaw_range = zero_out * (1.0 - fabsf(pitch_out));
-        float yaw_range = zero_out;
+            pitch_out *= aer_scalar;
+            drive_out *= aer_scalar;
+            yaw_out *= aer_scalar;
+
+        }
 
         SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorLeft, 1000 * (base_output + yaw_out * yaw_range));
         SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorRight, 1000 * (base_output - yaw_out * yaw_range));
@@ -425,10 +436,10 @@ void QuadPlane::tiltrotor_vectored_yaw(void)
         //SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorLeft, 1000 * (base_output - (pitch_out * pitch_range) + (yaw_out * yaw_range)));
         //SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorRight, 1000 * (base_output - (pitch_out * pitch_range) - (yaw_out * yaw_range)));
 
-        SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorFrontLeft, 1000 * (base_output - drive_out * drive_range));
-        SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorFrontRight, 1000 * (base_output - drive_out * drive_range));
-        SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorBackLeft, 1000 * (base_output + lean_out * lean_range));
-        SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorBackRight, 1000 * (base_output + lean_out * lean_range));
+        SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorFrontLeft, 1000 * (base_output + (lean_out * lean_range) - (pitch_out * pitch_range) + (yaw_out * yaw_range) - (drive_out * drive_range)));
+        SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorFrontRight, 1000 * (base_output + (lean_out * lean_range) - (pitch_out * pitch_range) - (yaw_out * yaw_range) - (drive_out * drive_range)));
+        SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorBackLeft, 1000 * (base_output + (lean_out * lean_range) + (pitch_out * pitch_range) + (yaw_out * yaw_range) - (drive_out * drive_range)));
+        SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorBackRight, 1000 * (base_output + (lean_out * lean_range) + (pitch_out * pitch_range) - (yaw_out * yaw_range) - (drive_out * drive_range)));
 
         //SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorFrontLeft, 1000 * (base_output + yaw_out * yaw_range));
         //SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorFrontRight, 1000 * (base_output - yaw_out * yaw_range));
