@@ -15,12 +15,12 @@ bool ModeQStabilize::_enter()
     return true;
 }
 
-/* Commented out for AerTilt from here...
 void ModeQStabilize::update()
 {
     // set nav_roll and nav_pitch using sticks
     int16_t roll_limit = MIN(plane.roll_limit_cd, plane.quadplane.aparm.angle_max);
-    float pitch_input = plane.channel_pitch->norm_input();
+    float aertilt_lean = SRV_Channels::get_output_norm(SRV_Channel::k_rcin8); ///< Line added for AerTilt
+    float pitch_input = aertilt_lean; //plane.channel_pitch->norm_input(); ///< For AerTilt
     // Scale from normalized input [-1,1] to centidegrees
     if (plane.quadplane.tailsitter_active()) {
         // separate limit for tailsitter roll, if set
@@ -44,38 +44,4 @@ void ModeQStabilize::update()
     plane.nav_roll_cd = (plane.channel_roll->get_control_in() / 4500.0) * roll_limit;
     plane.nav_roll_cd = constrain_int32(plane.nav_roll_cd, -roll_limit, roll_limit);
 }
-... to here Aertilt */
 
-///< Modified block for Aertilt from here...
-void ModeQStabilize::update()
-{
-    // set nav_roll and nav_pitch using sticks
-    int16_t roll_limit = MIN(plane.roll_limit_cd, plane.quadplane.aparm.angle_max);
-    float aertilt_lean = SRV_Channels::get_output_norm(SRV_Channel::k_rcin8);
-    float pitch_input = aertilt_lean;
-    // Scale from normalized input [-1,1] to centidegrees
-    if (plane.quadplane.tailsitter_active()) {
-        // separate limit for tailsitter roll, if set
-        if (plane.quadplane.tailsitter.max_roll_angle > 0) {
-            roll_limit = plane.quadplane.tailsitter.max_roll_angle * 100.0f;
-        }
-
-        // angle max for tailsitter pitch
-        plane.nav_pitch_cd = pitch_input * plane.quadplane.aparm.angle_max;
-    }
-    else {
-        // pitch is further constrained by LIM_PITCH_MIN/MAX which may impose
-        // tighter (possibly asymmetrical) limits than Q_ANGLE_MAX
-        if (pitch_input > 0) {
-            plane.nav_pitch_cd = pitch_input * MIN(plane.aparm.pitch_limit_max_cd, plane.quadplane.aparm.angle_max);
-        }
-        else {
-            plane.nav_pitch_cd = pitch_input * MIN(-plane.pitch_limit_min_cd, plane.quadplane.aparm.angle_max);
-        }
-        plane.nav_pitch_cd = constrain_int32(plane.nav_pitch_cd, plane.pitch_limit_min_cd, plane.aparm.pitch_limit_max_cd.get());
-    }
-
-    plane.nav_roll_cd = (plane.channel_roll->get_control_in() / 4500.0) * roll_limit;
-    plane.nav_roll_cd = constrain_int32(plane.nav_roll_cd, -roll_limit, roll_limit);
-}
-///< ... to here AerTilt

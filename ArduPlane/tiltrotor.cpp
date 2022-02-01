@@ -407,7 +407,7 @@ void QuadPlane::tiltrotor_vectored_yaw(void)
     else {
         // In hover
         float lean_out = SRV_Channels::get_output_norm(SRV_Channel::k_rcin8);
-        float lean_range = 90.0f / total_angle;
+        float lean_range = plane.quadplane.aparm.angle_max * 0.01f / total_angle;
 
         float drive_out = plane.channel_pitch->norm_input();
         float drive_range = zero_out;
