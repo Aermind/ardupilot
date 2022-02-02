@@ -406,12 +406,18 @@ void QuadPlane::tiltrotor_vectored_yaw(void)
     }
     else {
         // In hover
-        float lean_out = SRV_Channels::get_output_norm(SRV_Channel::k_rcin8);
-        float lean_max_angle_deg = plane.quadplane.aparm.angle_max * 0.01f;
-        float lean_range = lean_max_angle_deg / total_angle;
-        float lean_angle_deg = (lean_out * lean_max_angle_deg) -15.0;
 
-        float pitch_out = motors->get_pitch() * sinf(radians(lean_angle_deg));
+        float lean_angle_deg = ahrs.pitch_sensor * 0.01f;
+        float lean_angle_deg_max = plane.quadplane.aparm.angle_max * 0.01f;
+        float lean_out = lean_angle_deg / lean_angle_deg_max;
+        float lean_range = lean_angle_deg_max / total_angle;
+
+        /*
+        float lean_out = SRV_Channels::get_output_norm(SRV_Channel::k_rcin8);
+        float lean_angle_deg = lean_out * lean_angle_deg_max;
+        */
+
+        float pitch_out = motors->get_pitch() * sinf(radians(lean_angle_deg - 15.0));
         float pitch_range = zero_out;
 
         float yaw_out = motors->get_yaw();
