@@ -1693,10 +1693,19 @@ void QuadPlane::update(void)
         return;
     }
 
+    /* Commented out for AerTilt from here ...
     if ((ahrs_view != NULL) && !is_equal(_last_ahrs_trim_pitch, ahrs_trim_pitch.get())) {
         _last_ahrs_trim_pitch = ahrs_trim_pitch.get();
         ahrs_view->set_pitch_trim(_last_ahrs_trim_pitch);
     }
+    ...to here AerTilt*/
+
+    // Modified for AerTilt from here...
+    if ((ahrs_view != NULL) && !is_equal(_last_ahrs_trim_pitch, ahrs_trim_pitch.get() + SRV_Channels::get_output_norm(SRV_Channel::k_rcin8) * aparm.angle_max * 0.01f)) {
+        _last_ahrs_trim_pitch = ahrs_trim_pitch.get() + SRV_Channels::get_output_norm(SRV_Channel::k_rcin8) * aparm.angle_max * 0.01f;
+        ahrs_view->set_pitch_trim(_last_ahrs_trim_pitch);
+    }
+    // ...to here AerTilt
 
 #if ADVANCED_FAILSAFE == ENABLED
     if (plane.afs.should_crash_vehicle() && !plane.afs.terminating_vehicle_via_landing()) {
