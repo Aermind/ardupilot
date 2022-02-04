@@ -418,7 +418,7 @@ void QuadPlane::tiltrotor_vectored_yaw(void)
         float yaw_out = motors->get_yaw();
         float yaw_range = zero_out;
 
-        float drive_out = plane.channel_pitch->norm_input();
+        float drive_out = 0.0f; // plane.channel_pitch->norm_input();
         float drive_range = zero_out;
 
         if ((fabsf(pitch_out) + fabsf(drive_out) + fabsf(yaw_out)) > 1.0) {
