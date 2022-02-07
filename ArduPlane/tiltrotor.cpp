@@ -410,9 +410,15 @@ void QuadPlane::tiltrotor_vectored_yaw(void)
         float lean_out = SRV_Channels::get_output_norm(SRV_Channel::k_rcin8);
         float lean_angle_deg_max = plane.quadplane.aparm.angle_max * 0.01f;
         float lean_angle_deg = lean_out * lean_angle_deg_max;
+        float lean_angle_deg_offset = lean_angle_deg - 15.0f;
         float lean_range = lean_angle_deg_max / total_angle;
 
-        float pitch_out = motors->get_pitch() * sinf(radians(lean_angle_deg - 15.0));
+        float pitch_motor_scale = tailsitter.vectored_forward_gain;
+        float pitch_motor = motors->get_pitch();
+        float pitch_motor_out = pitch_motor * ((1.0f - pitch_motor_scale) * cosf(radians(lean_angle_deg_offset)) + pitch_motor_scale);
+
+        float pitch_out_scale = tailsitter.vectored_hover_gain;
+        float pitch_out = pitch_motor * pitch_out_scale * sinf(radians(lean_angle_deg_offset));
         float pitch_range = zero_out;
 
         float yaw_out = motors->get_yaw();
@@ -447,7 +453,7 @@ void QuadPlane::tiltrotor_vectored_yaw(void)
         //SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorBackLeft, 1000 * (base_output + yaw_out * yaw_range));
         //SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorBackRight, 1000 * (base_output - yaw_out * yaw_range));
 
-        //motors->set_pitch(0);
+        motors->set_pitch(pitch_motor_out);
         motors->set_yaw(0);
         motors->output();
     }
