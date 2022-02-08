@@ -20,6 +20,7 @@
 
 #include "AP_AHRS_View.h"
 #include <stdio.h>
+#include "Plane.h"
 
 AP_AHRS_View::AP_AHRS_View(AP_AHRS &_ahrs, enum Rotation _rotation, float pitch_trim_deg) :
     rotation(_rotation),
