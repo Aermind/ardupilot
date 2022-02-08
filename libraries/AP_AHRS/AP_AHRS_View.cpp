@@ -27,7 +27,7 @@ AP_AHRS_View::AP_AHRS_View(AP_AHRS &_ahrs, enum Rotation _rotation, float pitch_
 {
     switch (rotation) {
     case ROTATION_NONE:
-        y_angle = 0;
+        y_angle = SRV_Channels::get_output_norm(SRV_Channel::k_rcin8) * plane.quadplane.aparm.angle_max * 0.01f; // y_angle = 0; AerTilt
         break;
     case ROTATION_PITCH_90:
         y_angle = 90;
