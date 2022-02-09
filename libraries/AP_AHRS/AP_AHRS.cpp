@@ -362,12 +362,22 @@ void AP_AHRS::calc_trig(const Matrix3f &rot,
 //      should be called after _dcm_matrix is updated
 void AP_AHRS::update_trig(void)
 {
+    /* Commented out for AerTilt from here...
     if (_last_trim != _trim.get()) {
-        float aertilt_rotation = SRV_Channels::get_output_norm(SRV_Channel::k_rcin8);
         _last_trim = _trim.get();
-        _rotation_autopilot_body_to_vehicle_body.from_euler(_last_trim.x, _last_trim.y + aertilt_rotation, 0.0f); // AerTilt added 0.0f to trim.y
+        _rotation_autopilot_body_to_vehicle_body.from_euler(_last_trim.x, _last_trim.y, 0.0f);
         _rotation_vehicle_body_to_autopilot_body = _rotation_autopilot_body_to_vehicle_body.transposed();
     }
+    ... to here, AerTilt */
+
+    // Modified for AerTilt from here...
+    if (_last_trim != _trim.get()) {
+        float aertilt_rotation = SRV_Channels::get_output_norm(SRV_Channel::k_rcin8) * plane.quadplane.aparm.angle_max * 0.01f;
+        _last_trim = _trim.get();
+        _rotation_autopilot_body_to_vehicle_body.from_euler(_last_trim.x, _last_trim.y + aertilt_rotation, 0.0f);
+        _rotation_vehicle_body_to_autopilot_body = _rotation_autopilot_body_to_vehicle_body.transposed();
+    }
+    // ... to here, AerTilt
 
     calc_trig(get_rotation_body_to_ned(),
               _cos_roll, _cos_pitch, _cos_yaw,
