@@ -458,7 +458,7 @@ void QuadPlane::tiltrotor_vectored_yaw(void)
         motors->set_pitch(pitch_motor_out);
         motors->set_yaw(0);
         motors->output();
-        ahrs.update_orientation();
+        ahrs.update_trig();
     }
 }
 
