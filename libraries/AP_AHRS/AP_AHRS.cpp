@@ -364,7 +364,7 @@ void AP_AHRS::update_trig(void)
 {
     if (_last_trim != _trim.get()) {
         _last_trim = _trim.get();
-        _rotation_autopilot_body_to_vehicle_body.from_euler(_last_trim.x, _last_trim.y, 0.0f);
+        _rotation_autopilot_body_to_vehicle_body.from_euler(_last_trim.x, _last_trim.y + 1.5f, 0.0f); // AerTilt added 1.5f to trim.y
         _rotation_vehicle_body_to_autopilot_body = _rotation_autopilot_body_to_vehicle_body.transposed();
     }
 
