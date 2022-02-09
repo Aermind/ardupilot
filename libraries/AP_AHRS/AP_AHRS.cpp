@@ -371,7 +371,7 @@ void AP_AHRS::update_trig(void)
     ... to here, AerTilt */
 
     // Modified for AerTilt from here...
-    if (_last_trim != _trim.get()) {
+    if (true) {
         float aertilt_rotation = radians(SRV_Channels::get_output_norm(SRV_Channel::k_rcin8) * 90.0f);
         _last_trim = _trim.get();
         _rotation_autopilot_body_to_vehicle_body.from_euler(_last_trim.x, _last_trim.y + aertilt_rotation, 0.0f);
