@@ -236,7 +236,8 @@ void AP_AHRS::update_orientation()
             _compass->set_board_orientation(orientation);
         }
     } else {
-        _custom_rotation.from_euler(radians(_custom_roll), radians(_custom_pitch + SRV_Channels::get_output_norm(SRV_Channel::k_rcin8)), radians(_custom_yaw)); // AerTilt
+        float aertilt_rotation = SRV_Channels::get_output_norm(SRV_Channel::k_rcin8);
+        _custom_rotation.from_euler(radians(_custom_roll), radians(_custom_pitch + aertilt_rotation), radians(_custom_yaw)); // AerTilt (just a marker)
         AP::ins().set_board_orientation(orientation, &_custom_rotation);
         if (_compass != nullptr) {
             _compass->set_board_orientation(orientation, &_custom_rotation);
