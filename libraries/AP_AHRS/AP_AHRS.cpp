@@ -236,7 +236,7 @@ void AP_AHRS::update_orientation()
             _compass->set_board_orientation(orientation);
         }
     } else {
-        _custom_rotation.from_euler(radians(_custom_roll), radians(_custom_pitch), radians(_custom_yaw));
+        _custom_rotation.from_euler(radians(_custom_roll), radians(_custom_pitch + SRV_Channels::get_output_norm(SRV_Channel::k_rcin8)), radians(_custom_yaw)); // AerTilt
         AP::ins().set_board_orientation(orientation, &_custom_rotation);
         if (_compass != nullptr) {
             _compass->set_board_orientation(orientation, &_custom_rotation);
@@ -364,7 +364,7 @@ void AP_AHRS::update_trig(void)
 {
     if (_last_trim != _trim.get()) {
         _last_trim = _trim.get();
-        _rotation_autopilot_body_to_vehicle_body.from_euler(_last_trim.x, _last_trim.y + SRV_Channels::get_output_norm(SRV_Channel::k_rcin8, 0.0f); // AerTilt added 1.5f to trim.y
+        _rotation_autopilot_body_to_vehicle_body.from_euler(_last_trim.x, _last_trim.y + 0.0f, 0.0f); // AerTilt added 0.0f to trim.y
         _rotation_vehicle_body_to_autopilot_body = _rotation_autopilot_body_to_vehicle_body.transposed();
     }
 
