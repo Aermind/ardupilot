@@ -16,6 +16,7 @@
 */
 #include "AP_AHRS.h"
 #include "AP_AHRS_View.h"
+#include "Plane.h" // for AerTilt
 #include <AP_HAL/AP_HAL.h>
 #include <AP_Logger/AP_Logger.h>
 #include <AP_GPS/AP_GPS.h>
@@ -372,9 +373,9 @@ void AP_AHRS::update_trig(void)
 
     // Modified for AerTilt from here...
     if (_last_trim != _trim.get()) {
-        float aertilt_rotation = SRV_Channels::get_output_norm(SRV_Channel::k_rcin8);
+        float aertilt_rotation = SRV_Channels::get_output_norm(SRV_Channel::k_rcin8) * plane.quadplane.aparm.angle_max * 0.01f;
         _last_trim = _trim.get();
-        _rotation_autopilot_body_to_vehicle_body.from_euler(_last_trim.x, _last_trim.y + aertilt_rotation + plane.quadplane.aparm.angle_max, 0.0f);
+        _rotation_autopilot_body_to_vehicle_body.from_euler(_last_trim.x, _last_trim.y + aertilt_rotation, 0.0f);
         _rotation_vehicle_body_to_autopilot_body = _rotation_autopilot_body_to_vehicle_body.transposed();
     }
     // ... to here, AerTilt
