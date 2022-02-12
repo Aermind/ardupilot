@@ -456,7 +456,8 @@ void QuadPlane::tiltrotor_vectored_yaw(void)
         motors->set_pitch(pitch_motor_out);
         motors->set_yaw(0);
         motors->output();
-        ahrs.update_trig();
+        attitude_control->shift_ef_yaw_target(0.0f);
+        //ahrs.update_trig();
     }
 }
 

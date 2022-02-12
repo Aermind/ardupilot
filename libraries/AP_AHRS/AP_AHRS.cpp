@@ -232,9 +232,9 @@ void AP_AHRS::update_orientation()
     const enum Rotation orientation = (enum Rotation)_board_orientation.get();
     if (orientation != ROTATION_CUSTOM) {
         AP::ins().set_board_orientation(orientation);
-        /*if (_compass != nullptr) {
-            _compass->set_board_orientation(orientation); commented out for AerTilt
-        }*/
+        if (_compass != nullptr) {
+            _compass->set_board_orientation(orientation);
+        }
     } else {
         _custom_rotation.from_euler(radians(_custom_roll), radians(_custom_pitch), radians(_custom_yaw)); // AerTilt (just a marker)
         AP::ins().set_board_orientation(orientation, &_custom_rotation);
