@@ -161,7 +161,7 @@ public:
     // this makes initial config easier
     void update_orientation();
 
-    void update_trig(void); // relocated from protected area for AerTilt
+    //void update_trig(void); // relocated from protected area for AerTilt
 
     void set_airspeed(AP_Airspeed *airspeed) {
         _airspeed = airspeed;
@@ -635,7 +635,7 @@ protected:
 
     // update_trig - recalculates _cos_roll, _cos_pitch, etc based on latest attitude
     //      should be called after _dcm_matrix is updated
-    // void update_trig(void); ///< commented out for AerTilt (moved to unprotecte area)
+    void update_trig(void); ///< commented out for AerTilt (moved to unprotecte area)
 
     // update roll_sensor, pitch_sensor and yaw_sensor
     void update_cd_values(void);
