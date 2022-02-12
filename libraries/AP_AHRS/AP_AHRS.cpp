@@ -199,7 +199,6 @@ bool AP_AHRS::airspeed_estimate(float *airspeed_ret) const
     return false;
 }
 
-/* commented out for AerTilt, from here...
 // set_trim
 void AP_AHRS::set_trim(const Vector3f &new_trim)
 {
@@ -226,36 +225,6 @@ void AP_AHRS::add_trim(float roll_in_radians, float pitch_in_radians, bool save_
         _trim.save();
     }
 }
-... to here, AerTilt */
-
-// modified for AerTilt, from here...
-// set_trim
-void AP_AHRS::set_trim(const Vector3f& new_trim)
-{
-    Vector3f trim;
-    trim.x = constrain_float(new_trim.x, ToRad(-90.0f), ToRad(90.0f));
-    trim.y = constrain_float(new_trim.y, ToRad(-90.0f), ToRad(90.0f));
-    _trim.set_and_save(trim);
-}
-
-// add_trim - adjust the roll and pitch trim up to a total of 10 degrees
-void AP_AHRS::add_trim(float roll_in_radians, float pitch_in_radians, bool save_to_eeprom)
-{
-    Vector3f trim = _trim.get();
-
-    // add new trim
-    trim.x = constrain_float(trim.x + roll_in_radians, ToRad(-90.0f), ToRad(90.0f));
-    trim.y = constrain_float(trim.y + pitch_in_radians, ToRad(-90.0f), ToRad(90.0f));
-
-    // set new trim values
-    _trim.set(trim);
-
-    // save to eeprom
-    if (save_to_eeprom) {
-        _trim.save();
-    }
-}
-// ... to here, AerTilt
 
 // Set the board mounting orientation, may be called while disarmed
 void AP_AHRS::update_orientation()
@@ -263,9 +232,9 @@ void AP_AHRS::update_orientation()
     const enum Rotation orientation = (enum Rotation)_board_orientation.get();
     if (orientation != ROTATION_CUSTOM) {
         AP::ins().set_board_orientation(orientation);
-        if (_compass != nullptr) {
-            _compass->set_board_orientation(orientation);
-        }
+        /*if (_compass != nullptr) {
+            _compass->set_board_orientation(orientation); commented out for AerTilt
+        }*/
     } else {
         _custom_rotation.from_euler(radians(_custom_roll), radians(_custom_pitch), radians(_custom_yaw)); // AerTilt (just a marker)
         AP::ins().set_board_orientation(orientation, &_custom_rotation);
