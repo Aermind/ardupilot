@@ -850,7 +850,7 @@ void AC_AttitudeControl::shift_ef_yaw_target(float yaw_shift_cd)
 {
     float yaw_shift = radians(yaw_shift_cd * 0.01f);
     Quaternion _attitude_target_update_quat;
-    _attitude_target_update_quat.from_axis_angle(Vector3f(0.0f, yaw_shift, 0.0f)); // moved yaw_shift from yaw to pitch, AerTilt
+    _attitude_target_update_quat.from_axis_angle(Vector3f(0.0f, 0.0f, yaw_shift));
     _attitude_target_quat = _attitude_target_update_quat * _attitude_target_quat;
 }
 
