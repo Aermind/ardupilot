@@ -456,9 +456,7 @@ void QuadPlane::tiltrotor_vectored_yaw(void)
         motors->set_pitch(pitch_motor_out);
         motors->set_yaw(0);
         motors->output();
-        attitude_control->shift_ef_yaw_target(SRV_Channels::get_output_norm(SRV_Channel::k_rcin8) * 9000.0f);
-        attitude_control->inertial_frame_reset();
-        //ahrs.update_trig();
+        
     }
 }
 
