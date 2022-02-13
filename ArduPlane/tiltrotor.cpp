@@ -407,7 +407,7 @@ void QuadPlane::tiltrotor_vectored_yaw(void)
     else {
         // In hover
 
-        float drive_out = 0.0f; // -plane.channel_pitch->norm_input();
+        float drive_out = 0.0f;
         float drive_range = zero_out;
 
         float yaw_out = motors->get_yaw();
