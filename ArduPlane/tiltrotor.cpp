@@ -405,7 +405,7 @@ void QuadPlane::tiltrotor_vectored_yaw(void)
         SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorBackRight, 1000 * (base_output + elevon_right * elevon_range));
     }
     else {
-        // In hover
+        // In hover flight
 
         float angle_offset = -15.0f;
 
