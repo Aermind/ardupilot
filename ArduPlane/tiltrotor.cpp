@@ -369,6 +369,7 @@ void QuadPlane::tiltrotor_vectoring(void)
                 // base the tilt on elevon mixing, which means it
                 // takes account of the MIXING_GAIN. The rear tilt is
                 // based on elevator
+                // AerLean test
                 const float right = gain * SRV_Channels::get_output_scaled(SRV_Channel::k_elevon_right) / 4500.0;
                 const float left  = gain * SRV_Channels::get_output_scaled(SRV_Channel::k_elevon_left) / 4500.0;
                 const float mid  = gain * SRV_Channels::get_output_scaled(SRV_Channel::k_elevator) / 4500.0;
