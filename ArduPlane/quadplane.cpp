@@ -751,11 +751,13 @@ bool QuadPlane::setup(void)
             }
             break;
         default:
+            gcs().send_text(MAV_SEVERITY_ERROR, "Aerlean, tiltrotor???");
             motors = new AP_MotorsMatrix(plane.scheduler.get_loop_rate_hz(), rc_speed);
             motors_var_info = AP_MotorsMatrix::var_info;
             break;
         }
     } else {
+        gcs().send_text(MAV_SEVERITY_ERROR, "AerLean, tailsitter???");
         // this is a copter tailsitter with motor layout specified by frame_class and frame_type
         // tilting motors are not supported (tiltrotor control variables are ignored)
         if (tilt.tilt_mask != 0) {
@@ -986,7 +988,6 @@ void QuadPlane::multicopter_attitude_rate_update(float yaw_rate_cds)
             (tailsitter.input_type & TAILSITTER_INPUT_BF_ROLL)) {
 
             if (!(tailsitter.input_type & TAILSITTER_INPUT_PLANE)) {
-                gcs().send_text(MAV_SEVERITY_INFO, "AerLean M5");
                 // In multicopter input mode, the roll and yaw stick axes are independent of pitch
                 attitude_control->input_euler_rate_yaw_euler_angle_pitch_bf_roll(false,
                                                                                 plane.nav_roll_cd,
@@ -1016,7 +1017,6 @@ void QuadPlane::multicopter_attitude_rate_update(float yaw_rate_cds)
 
                 float p_yaw_rate = plane.nav_roll_cd / y2r_scale;
                 float p_roll_angle = -y2r_scale * yaw_rate_cds;
-                gcs().send_text(MAV_SEVERITY_INFO, "AerLean M4");
                 attitude_control->input_euler_rate_yaw_euler_angle_pitch_bf_roll(true,
                                                                                 p_roll_angle,
                                                                                 plane.nav_pitch_cd,
@@ -1026,22 +1026,20 @@ void QuadPlane::multicopter_attitude_rate_update(float yaw_rate_cds)
         }
 
         if (use_multicopter_eulers) {
-            gcs().send_text(MAV_SEVERITY_INFO, "AerLean M3");
+            // AerLean marker: forward flight tiltrotor (but not tailsiter) code goes through here
             attitude_control->input_euler_angle_roll_pitch_yaw(plane.nav_roll_cd,
                                                                plane.nav_pitch_cd,
                                                                tilt.transition_yaw_cd,
                                                                true);
         } else {
-            // AerLean marker: believe multicopter tiltrotor and tailsitter code goes through here
+            // AerLean marker: multicopter tiltrotor AND multicopter tailsitter code goes through here
             // use euler angle attitude control
             attitude_control->input_euler_angle_roll_pitch_euler_rate_yaw(plane.nav_roll_cd,
                                                                           plane.nav_pitch_cd,
                                                                           yaw_rate_cds);
-            gcs().send_text(MAV_SEVERITY_INFO, "AerLean M1");
         }
     } else {
         // use the fixed wing desired rates
-        gcs().send_text(MAV_SEVERITY_INFO, "AerLean M2");
         float roll_rate = plane.rollController.get_pid_info().target;
         float pitch_rate = plane.pitchController.get_pid_info().target;
         if (is_tailsitter()) {
