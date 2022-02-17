@@ -751,13 +751,13 @@ bool QuadPlane::setup(void)
             }
             break;
         default:
-            gcs().send_text(MAV_SEVERITY_ERROR, "Aerlean, tiltrotor???");
+            // AerLean marker: tiltrotor goes through here (once)
             motors = new AP_MotorsMatrix(plane.scheduler.get_loop_rate_hz(), rc_speed);
             motors_var_info = AP_MotorsMatrix::var_info;
             break;
         }
     } else {
-        gcs().send_text(MAV_SEVERITY_ERROR, "AerLean, tailsitter???");
+        // AerLean marker: tailsitter goes through here (once)
         // this is a copter tailsitter with motor layout specified by frame_class and frame_type
         // tilting motors are not supported (tiltrotor control variables are ignored)
         if (tilt.tilt_mask != 0) {
@@ -1026,14 +1026,15 @@ void QuadPlane::multicopter_attitude_rate_update(float yaw_rate_cds)
         }
 
         if (use_multicopter_eulers) {
-            // AerLean marker: forward flight tiltrotor (but not tailsiter) code goes through here
+            // AerLean marker: forward flight tiltrotor (but not tailsiter) code goes through here (looping)
             attitude_control->input_euler_angle_roll_pitch_yaw(plane.nav_roll_cd,
                                                                plane.nav_pitch_cd,
                                                                tilt.transition_yaw_cd,
                                                                true);
         } else {
-            // AerLean marker: multicopter tiltrotor AND multicopter tailsitter code goes through here
+            // AerLean marker: multicopter tiltrotor AND multicopter tailsitter code goes through here (looping)
             // use euler angle attitude control
+            printf("AerLean pitch = %f.0\n", plane.nav_pitch_cd);
             attitude_control->input_euler_angle_roll_pitch_euler_rate_yaw(plane.nav_roll_cd,
                                                                           plane.nav_pitch_cd,
                                                                           yaw_rate_cds);
