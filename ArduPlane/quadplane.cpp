@@ -1034,7 +1034,7 @@ void QuadPlane::multicopter_attitude_rate_update(float yaw_rate_cds)
         } else {
             // AerLean marker: multicopter tiltrotor AND multicopter tailsitter code goes through here (looping)
             // use euler angle attitude control
-            printf("AerLean pitch = %f.0\n", plane.nav_pitch_cd);
+            gcs().send_text(MAV_SEVERITY_INFO, "Pitch %.1fm", plane.nav_pitch_cd);
             attitude_control->input_euler_angle_roll_pitch_euler_rate_yaw(plane.nav_roll_cd,
                                                                           plane.nav_pitch_cd,
                                                                           yaw_rate_cds);
