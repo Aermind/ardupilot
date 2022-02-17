@@ -258,12 +258,14 @@ void AC_AttitudeControl::input_euler_angle_roll_pitch_euler_rate_yaw(float euler
 
     // calculate the attitude target euler angles
     _attitude_target.to_euler(_euler_angle_target.x, _euler_angle_target.y, _euler_angle_target.z);
-    gcs().send_text(MAV_SEVERITY_INFO, "AerLean roll = %.2f pitch = %.2f yaw = %.2f", _euler_angle_target.x, _euler_angle_target.y, _euler_angle_target.z);
+    // AerLean note: _euler_angle_target.x,y,z the same for both tiltrotor AND tailsitter
+
     // Add roll trim to compensate tail rotor thrust in heli (will return zero on multirotors)
     euler_roll_angle += get_roll_trim_rad();
 
     if (_rate_bf_ff_enabled) {
-        // AerLean note: multicopter tiltrotor AND multicopter tailsitter code goes through here (looping)
+        // AerLean note: tiltrotor AND tailsitter code goes through here (looping)
+
         // translate the roll pitch and yaw acceleration limits to the euler axis
         const Vector3f euler_accel = euler_accel_limit(_euler_angle_target, Vector3f{get_accel_roll_max_radss(), get_accel_pitch_max_radss(), get_accel_yaw_max_radss()});
 
@@ -276,7 +278,7 @@ void AC_AttitudeControl::input_euler_angle_roll_pitch_euler_rate_yaw(float euler
         // When yaw acceleration limiting is enabled, the yaw input shaper constrains angular acceleration about the yaw axis, slewing
         // the output rate towards the input rate.
         _euler_rate_target.z = input_shaping_ang_vel(_euler_rate_target.z, euler_yaw_rate, euler_accel.z, _dt);
-
+        gcs().send_text(MAV_SEVERITY_INFO, "AerLean roll = %.2f pitch = %.2f yaw = %.2f", _euler_rate_target.x, _euler_rate_target.y, _euler_rate_target.z);
         // Convert euler angle derivative of desired attitude into a body-frame angular velocity vector for feedforward
         euler_rate_to_ang_vel(_euler_angle_target, _euler_rate_target, _ang_vel_target);
         // Limit the angular velocity
