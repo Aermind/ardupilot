@@ -22,7 +22,7 @@ void ModeQStabilize::update()
     // normalize control_input to [-1,1]
     const float roll_input = (float)plane.channel_roll->get_control_in() / plane.channel_roll->get_range();
     const float pitch_input = (float)plane.channel_pitch->get_control_in() / plane.channel_pitch->get_range();
-
+    gcs().send_text(MAV_SEVERITY_INFO, "Roll %f", roll_input);
     // then scale to target angles in centidegrees
     if (plane.quadplane.tailsitter_active()) {
         // tailsitters are different

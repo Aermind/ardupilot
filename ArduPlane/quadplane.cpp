@@ -751,13 +751,13 @@ bool QuadPlane::setup(void)
             }
             break;
         default:
-            // AerLean marker: tiltrotor goes through here (once)
+            // AerLean note: tiltrotor goes through here (once)
             motors = new AP_MotorsMatrix(plane.scheduler.get_loop_rate_hz(), rc_speed);
             motors_var_info = AP_MotorsMatrix::var_info;
             break;
         }
     } else {
-        // AerLean marker: tailsitter goes through here (once)
+        // AerLean note: tailsitter goes through here (once)
         // this is a copter tailsitter with motor layout specified by frame_class and frame_type
         // tilting motors are not supported (tiltrotor control variables are ignored)
         if (tilt.tilt_mask != 0) {
@@ -1026,15 +1026,17 @@ void QuadPlane::multicopter_attitude_rate_update(float yaw_rate_cds)
         }
 
         if (use_multicopter_eulers) {
-            // AerLean marker: forward flight tiltrotor (but not tailsiter) code goes through here (looping)
+            // AerLean note: forward flight tiltrotor (but not tailsiter) code goes through here (looping)
             attitude_control->input_euler_angle_roll_pitch_yaw(plane.nav_roll_cd,
                                                                plane.nav_pitch_cd,
                                                                tilt.transition_yaw_cd,
                                                                true);
         } else {
-            // AerLean marker: multicopter tiltrotor AND multicopter tailsitter code goes through here (looping)
+            // AerLean note: multicopter tiltrotor AND multicopter tailsitter code goes through here (looping)
+            // AerLean note: roll input (plane.nav_roll_cd) already limmited for tiltrotor when Q_trim_pitch = 90, NOT limited for tailsitter
+            // AerLean note: pitch input (plane.nav_pitch_cd) same for both tiltrotor when Q_trim_pitch = 90, AND tailsitter
             // use euler angle attitude control
-            gcs().send_text(MAV_SEVERITY_INFO, "Pitch %ld", plane.nav_roll_cd);
+            // gcs().send_text(MAV_SEVERITY_INFO, "Roll %ld", plane.nav_roll_cd);
             attitude_control->input_euler_angle_roll_pitch_euler_rate_yaw(plane.nav_roll_cd,
                                                                           plane.nav_pitch_cd,
                                                                           yaw_rate_cds);
