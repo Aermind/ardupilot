@@ -277,8 +277,6 @@ void AC_AttitudeControl::input_euler_angle_roll_pitch_euler_rate_yaw(float euler
         // When yaw acceleration limiting is enabled, the yaw input shaper constrains angular acceleration about the yaw axis, slewing
         // the output rate towards the input rate.
         _euler_rate_target.z = input_shaping_ang_vel(_euler_rate_target.z, euler_yaw_rate, euler_accel.z, _dt);
-        
-        // AerLean note: _euler_rate_target.x,y,z the same for both tiltrotor AND tailsitter
 
         // Convert euler angle derivative of desired attitude into a body-frame angular velocity vector for feedforward
         euler_rate_to_ang_vel(_euler_angle_target, _euler_rate_target, _ang_vel_target);
@@ -287,7 +285,9 @@ void AC_AttitudeControl::input_euler_angle_roll_pitch_euler_rate_yaw(float euler
         // Convert body-frame angular velocity into euler angle derivative of desired attitude
         ang_vel_to_euler_rate(_euler_angle_target, _ang_vel_target, _euler_rate_target);
         // AerLean note: _euler_angle_target.x,y,z the same for both tiltrotor AND tailsitter
-        gcs().send_text(MAV_SEVERITY_INFO, "AerLean roll = %.2f,  pitch = %.2f,  yaw = %.2f", _euler_rate_target.x, _euler_rate_target.y, _euler_rate_target.z);
+
+        // AerLean note: _euler_rate_target.x,y,z the same for both tiltrotor AND tailsitter
+        gcs().send_text(MAV_SEVERITY_INFO, "AerLean roll = %.2f,  pitch = %.2f,  yaw = %.2f", _ang_vel_target.x, _ang_vel_target.y, _ang_vel_target.z);
     } else {
         // When feedforward is not enabled, the target euler angle is input into the target and the feedforward rate is zeroed.
         _euler_angle_target.x = euler_roll_angle;
