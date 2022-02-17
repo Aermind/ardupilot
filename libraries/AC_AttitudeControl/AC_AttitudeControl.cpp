@@ -284,11 +284,11 @@ void AC_AttitudeControl::input_euler_angle_roll_pitch_euler_rate_yaw(float euler
         ang_vel_limit(_ang_vel_target, radians(_ang_vel_roll_max), radians(_ang_vel_pitch_max), radians(_ang_vel_yaw_max));
         // Convert body-frame angular velocity into euler angle derivative of desired attitude
         ang_vel_to_euler_rate(_euler_angle_target, _ang_vel_target, _euler_rate_target);
-
+        gcs().send_text(MAV_SEVERITY_INFO, "AerLean attitude = %.2f", _attitude_target);
         // AerLean note: _euler_angle_target.x,y,z the same for both tiltrotor AND tailsitter
         // AerLean note: _euler_rate_target.x,y,z the same for both tiltrotor AND tailsitter
         // AerLean note: _ang_vel_target.x,y,z the same for both tiltrotor AND tailsitter
-        gcs().send_text(MAV_SEVERITY_INFO, "AerLean roll = %.2f,  pitch = %.2f,  yaw = %.2f", _attitude_target.x, _attitude_target.y, _attitude_target.z);
+        // gcs().send_text(MAV_SEVERITY_INFO, "AerLean roll = %.2f,  pitch = %.2f,  yaw = %.2f", _ang_vel_target.x, _ang_vel_target.y, _ang_vel_target.z);
     } else {
         // When feedforward is not enabled, the target euler angle is input into the target and the feedforward rate is zeroed.
         _euler_angle_target.x = euler_roll_angle;
