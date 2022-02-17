@@ -258,11 +258,12 @@ void AC_AttitudeControl::input_euler_angle_roll_pitch_euler_rate_yaw(float euler
 
     // calculate the attitude target euler angles
     _attitude_target.to_euler(_euler_angle_target.x, _euler_angle_target.y, _euler_angle_target.z);
-
+    gcs().send_text(MAV_SEVERITY_INFO, "AerLean roll = %.2f pitch = %.2f yaw = %.2f", _euler_angle_target.x, _euler_angle_target.y, _euler_angle_target.z);
     // Add roll trim to compensate tail rotor thrust in heli (will return zero on multirotors)
     euler_roll_angle += get_roll_trim_rad();
 
     if (_rate_bf_ff_enabled) {
+        // AerLean note: multicopter tiltrotor AND multicopter tailsitter code goes through here (looping)
         // translate the roll pitch and yaw acceleration limits to the euler axis
         const Vector3f euler_accel = euler_accel_limit(_euler_angle_target, Vector3f{get_accel_roll_max_radss(), get_accel_pitch_max_radss(), get_accel_yaw_max_radss()});
 
@@ -282,7 +283,6 @@ void AC_AttitudeControl::input_euler_angle_roll_pitch_euler_rate_yaw(float euler
         ang_vel_limit(_ang_vel_target, radians(_ang_vel_roll_max), radians(_ang_vel_pitch_max), radians(_ang_vel_yaw_max));
         // Convert body-frame angular velocity into euler angle derivative of desired attitude
         ang_vel_to_euler_rate(_euler_angle_target, _ang_vel_target, _euler_rate_target);
-        gcs().send_text(MAV_SEVERITY_INFO, "AerLean feedforward enabled");
     } else {
         // When feedforward is not enabled, the target euler angle is input into the target and the feedforward rate is zeroed.
         _euler_angle_target.x = euler_roll_angle;
@@ -294,7 +294,6 @@ void AC_AttitudeControl::input_euler_angle_roll_pitch_euler_rate_yaw(float euler
         // Set rate feedforward requests to zero
         _euler_rate_target.zero();
         _ang_vel_target.zero();
-        gcs().send_text(MAV_SEVERITY_INFO, "AerLean feedforward disabled");
     }
 
     // Call quaternion attitude controller
