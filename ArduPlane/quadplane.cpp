@@ -1033,8 +1033,8 @@ void QuadPlane::multicopter_attitude_rate_update(float yaw_rate_cds)
                                                                true);
         } else {
             // AerLean note: multicopter tiltrotor AND multicopter tailsitter code goes through here (looping)
-            // AerLean note: roll input (plane.nav_roll_cd) already limmited for tiltrotor when Q_trim_pitch = 90, NOT limited for tailsitter
-            // AerLean note: pitch input (plane.nav_pitch_cd) same for both tiltrotor when Q_trim_pitch = 90, AND tailsitter
+            // AerLean note: roll input (plane.nav_roll_cd) same for both tiltrotor (when Q_trim_pitch = 90 and Q_options ignores forward fight angle limits) AND tailsitter
+            // AerLean note: pitch input (plane.nav_pitch_cd) same for both tiltrotor (when Q_trim_pitch = 90) AND tailsitter
             // use euler angle attitude control
             // gcs().send_text(MAV_SEVERITY_INFO, "AerLean roll %ld", plane.nav_roll_cd);
             attitude_control->input_euler_angle_roll_pitch_euler_rate_yaw(plane.nav_roll_cd,

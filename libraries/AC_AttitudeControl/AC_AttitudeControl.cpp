@@ -282,6 +282,7 @@ void AC_AttitudeControl::input_euler_angle_roll_pitch_euler_rate_yaw(float euler
         ang_vel_limit(_ang_vel_target, radians(_ang_vel_roll_max), radians(_ang_vel_pitch_max), radians(_ang_vel_yaw_max));
         // Convert body-frame angular velocity into euler angle derivative of desired attitude
         ang_vel_to_euler_rate(_euler_angle_target, _ang_vel_target, _euler_rate_target);
+        gcs().send_text(MAV_SEVERITY_INFO, "AerLean feedforward enabled");
     } else {
         // When feedforward is not enabled, the target euler angle is input into the target and the feedforward rate is zeroed.
         _euler_angle_target.x = euler_roll_angle;
@@ -293,6 +294,7 @@ void AC_AttitudeControl::input_euler_angle_roll_pitch_euler_rate_yaw(float euler
         // Set rate feedforward requests to zero
         _euler_rate_target.zero();
         _ang_vel_target.zero();
+        gcs().send_text(MAV_SEVERITY_INFO, "AerLean feedforward disabled");
     }
 
     // Call quaternion attitude controller

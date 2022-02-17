@@ -22,7 +22,6 @@ void ModeQStabilize::update()
     // normalize control_input to [-1,1]
     const float roll_input = (float)plane.channel_roll->get_control_in() / plane.channel_roll->get_range();
     const float pitch_input = (float)plane.channel_pitch->get_control_in() / plane.channel_pitch->get_range();
-    // AerLean note: roll_input same for both tiltrotor when Q_trim_pitch = 90, AND tailsitter
 
     // then scale to target angles in centidegrees
     if (plane.quadplane.tailsitter_active()) {
@@ -38,7 +37,6 @@ void ModeQStabilize::update()
         // use angle max for both roll and pitch
         plane.nav_roll_cd = roll_input * plane.quadplane.aparm.angle_max;
         plane.nav_pitch_cd = pitch_input * plane.quadplane.aparm.angle_max;
-        gcs().send_text(MAV_SEVERITY_INFO, "AerLean tiltrotor roll 1 = %ld", plane.nav_roll_cd);
     }
 }
 
@@ -52,7 +50,7 @@ void ModeQStabilize::set_tailsitter_roll_pitch(const float roll_input, const flo
     } else {
         plane.nav_roll_cd = roll_input * plane.quadplane.aparm.angle_max;
     }
-    gcs().send_text(MAV_SEVERITY_INFO, "AerLean tailsitter roll = %ld", plane.nav_roll_cd);
+
     // angle max for tailsitter pitch
     plane.nav_pitch_cd = pitch_input * plane.quadplane.aparm.angle_max;
 }
@@ -61,7 +59,7 @@ void ModeQStabilize::set_tailsitter_roll_pitch(const float roll_input, const flo
 void ModeQStabilize::set_limited_roll_pitch(const float roll_input, const float pitch_input)
 {
     plane.nav_roll_cd = roll_input * MIN(plane.roll_limit_cd, plane.quadplane.aparm.angle_max);
-    gcs().send_text(MAV_SEVERITY_INFO, "AerLean tiltrotor roll 2 = %ld", plane.nav_roll_cd);
+
     // pitch is further constrained by LIM_PITCH_MIN/MAX which may impose
     // tighter (possibly asymmetrical) limits than Q_ANGLE_MAX
     if (pitch_input > 0) {
