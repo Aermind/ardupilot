@@ -602,6 +602,7 @@ private:
 
     // time when we were last in a vtol control mode
     uint32_t last_vtol_mode_ms;
+    uint32_t AerLean_timer; // timer for AerLean use only
     
     void tiltrotor_slew(float tilt);
     void tiltrotor_binary_slew(bool forward);
