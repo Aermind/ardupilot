@@ -2274,6 +2274,10 @@ void QuadPlane::motors_output(bool run_rate_controller)
 {
     if (run_rate_controller) {
         attitude_control->rate_controller_run();
+        if ((AP_HAL::millis() - AerLean_timer) > 1000) {
+            gcs().send_text(MAV_SEVERITY_INFO, "AerLean Option 1");
+            AerLean_timer = AP_HAL::millis();
+        }
     }
 
     /* Delay for ARMING_DELAY_MS after arming before allowing props to spin:
