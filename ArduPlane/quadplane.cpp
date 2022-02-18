@@ -2278,6 +2278,8 @@ void QuadPlane::motors_output(bool run_rate_controller)
             gcs().send_text(MAV_SEVERITY_INFO, "AerLean Option 1");
             AerLean_timer = AP_HAL::millis();
         }
+    } else {
+        gcs().send_text(MAV_SEVERITY_INFO, "AerLean Option 2");
     }
 
     /* Delay for ARMING_DELAY_MS after arming before allowing props to spin:
