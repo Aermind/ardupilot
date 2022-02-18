@@ -284,7 +284,6 @@ void AC_AttitudeControl::input_euler_angle_roll_pitch_euler_rate_yaw(float euler
         ang_vel_limit(_ang_vel_target, radians(_ang_vel_roll_max), radians(_ang_vel_pitch_max), radians(_ang_vel_yaw_max));
         // Convert body-frame angular velocity into euler angle derivative of desired attitude
         ang_vel_to_euler_rate(_euler_angle_target, _ang_vel_target, _euler_rate_target);
-        gcs().send_text(MAV_SEVERITY_INFO, "AerLean attitude = %.2f", _attitude_target);
         // AerLean note: _euler_angle_target.x,y,z the same for both tiltrotor AND tailsitter
         // AerLean note: _euler_rate_target.x,y,z the same for both tiltrotor AND tailsitter
         // AerLean note: _ang_vel_target.x,y,z the same for both tiltrotor AND tailsitter
@@ -688,7 +687,7 @@ void AC_AttitudeControl::attitude_controller_run_quat()
 
     // ensure angular velocity does not go over configured limits
     ang_vel_limit(_ang_vel_body, radians(_ang_vel_roll_max), radians(_ang_vel_pitch_max), radians(_ang_vel_yaw_max));
-
+    gcs().send_text(MAV_SEVERITY_INFO, "AerLean roll = %.2f,  pitch = %.2f,  yaw = %.2f", _ang_vel_body.x, _ang_vel_body.y, _ang_vel_body.z);
     // rotation from the target frame to the body frame
     Quaternion rotation_target_to_body = attitude_body.inverse() * _attitude_target;
 
