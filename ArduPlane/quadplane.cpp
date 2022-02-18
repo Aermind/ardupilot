@@ -2272,7 +2272,7 @@ void QuadPlane::update_throttle_hover()
  */
 void QuadPlane::motors_output(bool run_rate_controller)
 {
-    if (false) { // AerLean note: changed from run_rate_controller to false
+    if (true) { // AerLean note: changed from run_rate_controller to true
         // AerLean note: target tailsitter goes thorugh here half of the time
         // AerLean note: tiltrotor goes through here exclusively
         attitude_control->rate_controller_run();
