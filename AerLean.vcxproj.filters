@@ -25,6 +25,9 @@
     <Filter Include="libraries\SRV_Channel">
       <UniqueIdentifier>{77520def-23d4-4570-9c7b-2840821b2d7c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="libraries\AP_Math">
+      <UniqueIdentifier>{31240b48-877d-4687-ba38-ce068bb0da87}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ArduPlane\afs_plane.cpp">
@@ -549,6 +552,57 @@
     <ClCompile Include="libraries\SRV_Channel\SRV_Channels.cpp">
       <Filter>libraries\SRV_Channel</Filter>
     </ClCompile>
+    <ClCompile Include="libraries\AP_Math\AP_GeodesicGrid.cpp">
+      <Filter>libraries\AP_Math</Filter>
+    </ClCompile>
+    <ClCompile Include="libraries\AP_Math\AP_Math.cpp">
+      <Filter>libraries\AP_Math</Filter>
+    </ClCompile>
+    <ClCompile Include="libraries\AP_Math\control.cpp">
+      <Filter>libraries\AP_Math</Filter>
+    </ClCompile>
+    <ClCompile Include="libraries\AP_Math\crc.cpp">
+      <Filter>libraries\AP_Math</Filter>
+    </ClCompile>
+    <ClCompile Include="libraries\AP_Math\location.cpp">
+      <Filter>libraries\AP_Math</Filter>
+    </ClCompile>
+    <ClCompile Include="libraries\AP_Math\location_double.cpp">
+      <Filter>libraries\AP_Math</Filter>
+    </ClCompile>
+    <ClCompile Include="libraries\AP_Math\matrix_alg.cpp">
+      <Filter>libraries\AP_Math</Filter>
+    </ClCompile>
+    <ClCompile Include="libraries\AP_Math\matrix3.cpp">
+      <Filter>libraries\AP_Math</Filter>
+    </ClCompile>
+    <ClCompile Include="libraries\AP_Math\matrixN.cpp">
+      <Filter>libraries\AP_Math</Filter>
+    </ClCompile>
+    <ClCompile Include="libraries\AP_Math\polyfit.cpp">
+      <Filter>libraries\AP_Math</Filter>
+    </ClCompile>
+    <ClCompile Include="libraries\AP_Math\polygon.cpp">
+      <Filter>libraries\AP_Math</Filter>
+    </ClCompile>
+    <ClCompile Include="libraries\AP_Math\quaternion.cpp">
+      <Filter>libraries\AP_Math</Filter>
+    </ClCompile>
+    <ClCompile Include="libraries\AP_Math\SCurve.cpp">
+      <Filter>libraries\AP_Math</Filter>
+    </ClCompile>
+    <ClCompile Include="libraries\AP_Math\spline5.cpp">
+      <Filter>libraries\AP_Math</Filter>
+    </ClCompile>
+    <ClCompile Include="libraries\AP_Math\SplineCurve.cpp">
+      <Filter>libraries\AP_Math</Filter>
+    </ClCompile>
+    <ClCompile Include="libraries\AP_Math\vector2.cpp">
+      <Filter>libraries\AP_Math</Filter>
+    </ClCompile>
+    <ClCompile Include="libraries\AP_Math\vector3.cpp">
+      <Filter>libraries\AP_Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArduPlane\afs_plane.h">
@@ -811,6 +865,63 @@
     </ClInclude>
     <ClInclude Include="libraries\SRV_Channel\SRV_Channel.h">
       <Filter>libraries\SRV_Channel</Filter>
+    </ClInclude>
+    <ClInclude Include="libraries\AP_Math\AP_GeodesicGrid.h">
+      <Filter>libraries\AP_Math</Filter>
+    </ClInclude>
+    <ClInclude Include="libraries\AP_Math\AP_Math.h">
+      <Filter>libraries\AP_Math</Filter>
+    </ClInclude>
+    <ClInclude Include="libraries\AP_Math\control.h">
+      <Filter>libraries\AP_Math</Filter>
+    </ClInclude>
+    <ClInclude Include="libraries\AP_Math\crc.h">
+      <Filter>libraries\AP_Math</Filter>
+    </ClInclude>
+    <ClInclude Include="libraries\AP_Math\definitions.h">
+      <Filter>libraries\AP_Math</Filter>
+    </ClInclude>
+    <ClInclude Include="libraries\AP_Math\ftype.h">
+      <Filter>libraries\AP_Math</Filter>
+    </ClInclude>
+    <ClInclude Include="libraries\AP_Math\location.h">
+      <Filter>libraries\AP_Math</Filter>
+    </ClInclude>
+    <ClInclude Include="libraries\AP_Math\matrix3.h">
+      <Filter>libraries\AP_Math</Filter>
+    </ClInclude>
+    <ClInclude Include="libraries\AP_Math\matrixN.h">
+      <Filter>libraries\AP_Math</Filter>
+    </ClInclude>
+    <ClInclude Include="libraries\AP_Math\polyfit.h">
+      <Filter>libraries\AP_Math</Filter>
+    </ClInclude>
+    <ClInclude Include="libraries\AP_Math\polygon.h">
+      <Filter>libraries\AP_Math</Filter>
+    </ClInclude>
+    <ClInclude Include="libraries\AP_Math\quaternion.h">
+      <Filter>libraries\AP_Math</Filter>
+    </ClInclude>
+    <ClInclude Include="libraries\AP_Math\rotations.h">
+      <Filter>libraries\AP_Math</Filter>
+    </ClInclude>
+    <ClInclude Include="libraries\AP_Math\SCurve.h">
+      <Filter>libraries\AP_Math</Filter>
+    </ClInclude>
+    <ClInclude Include="libraries\AP_Math\spline5.h">
+      <Filter>libraries\AP_Math</Filter>
+    </ClInclude>
+    <ClInclude Include="libraries\AP_Math\SplineCurve.h">
+      <Filter>libraries\AP_Math</Filter>
+    </ClInclude>
+    <ClInclude Include="libraries\AP_Math\vector2.h">
+      <Filter>libraries\AP_Math</Filter>
+    </ClInclude>
+    <ClInclude Include="libraries\AP_Math\vector3.h">
+      <Filter>libraries\AP_Math</Filter>
+    </ClInclude>
+    <ClInclude Include="libraries\AP_Math\vectorN.h">
+      <Filter>libraries\AP_Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

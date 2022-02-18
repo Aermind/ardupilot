@@ -667,7 +667,7 @@ bool QuadPlane::setup(void)
     }
     float loop_delta_t = 1.0 / plane.scheduler.get_loop_rate_hz();
 
-    enum Rotation rotation = ROTATION_NONE; // AerLean note: original value is ROTATION_NONE
+    enum Rotation rotation = ROTATION_NONE; // AerLean note: original value is "ROTATION_NONE"
 
     /*
       cope with upgrade from old AP_Motors values for frame_class
