@@ -667,7 +667,7 @@ bool QuadPlane::setup(void)
     }
     float loop_delta_t = 1.0 / plane.scheduler.get_loop_rate_hz();
 
-    enum Rotation rotation = ROTATION_PITCH_90; // AerLean note: changed ROTATION_NONE to ROTATION_PITCH_90 for testing purposes
+    enum Rotation rotation = ROTATION_NONE; // AerLean note: original value is ROTATION_NONE
 
     /*
       cope with upgrade from old AP_Motors values for frame_class
@@ -2062,10 +2062,6 @@ void QuadPlane::update(void)
         if (is_tailsitter()) {
             // tailsitters only relax I terms, to make ground testing easier
             attitude_control->reset_rate_controller_I_terms();
-            if ((AP_HAL::millis() - AerLean_timer) > 1000) {
-                gcs().send_text(MAV_SEVERITY_INFO, "AerLean Marker");
-                AerLean_timer = AP_HAL::millis();
-            }
         } else {
             // otherwise full relax
             attitude_control->relax_attitude_controllers();

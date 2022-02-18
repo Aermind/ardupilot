@@ -27,7 +27,7 @@ AP_AHRS_View::AP_AHRS_View(AP_AHRS &_ahrs, enum Rotation _rotation, float pitch_
 {
     switch (rotation) {
     case ROTATION_NONE:
-        y_angle = 0;
+        y_angle = 90; //AerLean note: original value is 0
         break;
     case ROTATION_PITCH_90:
         y_angle = 90;

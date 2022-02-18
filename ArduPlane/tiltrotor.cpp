@@ -418,6 +418,12 @@ void QuadPlane::tiltrotor_vectoring(void)
         SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorRear,  1000 * constrain_float(base_output,0,1));
         SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorRearLeft,  1000 * constrain_float(base_output + tilt_offset * yaw_range,0,1));
         SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorRearRight, 1000 * constrain_float(base_output - tilt_offset * yaw_range,0,1));
+        /*
+        if ((AP_HAL::millis() - AerLean_timer) > 1000) {
+            gcs().send_text(MAV_SEVERITY_INFO, "AerLean Marker");
+            AerLean_timer = AP_HAL::millis();
+        }
+        */
     }
 }
 
