@@ -2272,17 +2272,15 @@ void QuadPlane::update_throttle_hover()
  */
 void QuadPlane::motors_output(bool run_rate_controller)
 {
-    if (run_rate_controller) {
+    if (false) { // AerLean note: changed from run_rate_controller to false
+        // AerLean note: target tailsitter goes thorugh here half of the time
+        // AerLean note: tiltrotor goes through here exclusively
         attitude_control->rate_controller_run();
-        /*
+    } else {
         if ((AP_HAL::millis() - AerLean_timer) > 1000) {
             gcs().send_text(MAV_SEVERITY_INFO, "AerLean Option 1");
             AerLean_timer = AP_HAL::millis();
         }
-        */
-        gcs().send_text(MAV_SEVERITY_INFO, "AerLean Option 1");
-    } else {
-        gcs().send_text(MAV_SEVERITY_INFO, "AerLean Option 2");
     }
 
     /* Delay for ARMING_DELAY_MS after arming before allowing props to spin:
