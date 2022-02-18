@@ -667,7 +667,7 @@ bool QuadPlane::setup(void)
     }
     float loop_delta_t = 1.0 / plane.scheduler.get_loop_rate_hz();
 
-    enum Rotation rotation = ROTATION_NONE;
+    enum Rotation rotation = ROTATION_PITCH_90; // AerLean note: changed ROTATION_NONE to ROTATION_PITCH_90 for testing purposes
 
     /*
       cope with upgrade from old AP_Motors values for frame_class
@@ -2062,6 +2062,10 @@ void QuadPlane::update(void)
         if (is_tailsitter()) {
             // tailsitters only relax I terms, to make ground testing easier
             attitude_control->reset_rate_controller_I_terms();
+            if ((AP_HAL::millis() - AerLean_timer) > 1000) {
+                gcs().send_text(MAV_SEVERITY_INFO, "AerLean Marker");
+                AerLean_timer = AP_HAL::millis();
+            }
         } else {
             // otherwise full relax
             attitude_control->relax_attitude_controllers();
@@ -2272,15 +2276,10 @@ void QuadPlane::update_throttle_hover()
  */
 void QuadPlane::motors_output(bool run_rate_controller)
 {
-    if (true) { // AerLean note: changed from run_rate_controller to true
+    if (run_rate_controller) {
         // AerLean note: target tailsitter goes thorugh here half of the time
         // AerLean note: tiltrotor goes through here exclusively
         attitude_control->rate_controller_run();
-    } else {
-        if ((AP_HAL::millis() - AerLean_timer) > 1000) {
-            gcs().send_text(MAV_SEVERITY_INFO, "AerLean Option 1");
-            AerLean_timer = AP_HAL::millis();
-        }
     }
 
     /* Delay for ARMING_DELAY_MS after arming before allowing props to spin:
