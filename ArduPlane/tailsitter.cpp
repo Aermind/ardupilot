@@ -130,11 +130,6 @@ void QuadPlane::tailsitter_output(void)
         hold_stabilize(SRV_Channels::get_output_scaled(SRV_Channel::k_throttle) * 0.01f);
         motors_output(true);
 
-        if ((AP_HAL::millis() - AerLean_timer) > 250) {
-            gcs().send_text(MAV_SEVERITY_INFO, "AerLean Option 1");
-            AerLean_timer = AP_HAL::millis();
-        }
-
         if ((options & OPTION_TAILSIT_Q_ASSIST_MOTORS_ONLY) != 0) {
             // only use motors for Q assist, control surfaces remain under plane control
             // zero copter I terms and use plane
@@ -161,11 +156,8 @@ void QuadPlane::tailsitter_output(void)
             return;
         }
     } else {
+        // AerLean note: target tiltrotor code goes through here
         motors_output(false);
-        if ((AP_HAL::millis() - AerLean_timer) > 250) {
-            gcs().send_text(MAV_SEVERITY_INFO, "AerLean Option 2");
-            AerLean_timer = AP_HAL::millis();
-        }
     }
 
     // In full Q assist it is better to use cotper I and zero plane

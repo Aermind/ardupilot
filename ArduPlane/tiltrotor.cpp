@@ -399,6 +399,12 @@ void QuadPlane::tiltrotor_vectoring(void)
         SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorRearRight,1000 * constrain_float(base_output + right,0,1));
         SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorRear,  1000 * constrain_float(base_output + mid,0,1));
     } else {
+        plane.pitchController.reset_I(); // Aerlean note: testing this
+        plane.rollController.reset_I(); // AerLean note: testing this
+        if ((AP_HAL::millis() - AerLean_timer) > 250) {
+            gcs().send_text(MAV_SEVERITY_INFO, "AerLean Option 1");
+            AerLean_timer = AP_HAL::millis();
+        }
         const float yaw_out = motors->get_yaw();
         const float roll_out = motors->get_roll();
         float yaw_range = zero_out;
