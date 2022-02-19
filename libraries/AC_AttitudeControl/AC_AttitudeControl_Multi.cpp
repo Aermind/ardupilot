@@ -336,8 +336,9 @@ void AC_AttitudeControl_Multi::rate_controller_run()
     Vector3f gyro_latest = _ahrs.get_gyro_latest();
 
     float AerLean_lean_ang_deg = SRV_Channels::get_output_scaled(SRV_Channel::k_rcin8) / 50.0;
-    float sin_AerLean_lean_ang = sinf(radians(AerLean_lean_ang_deg));
-    float cos_AerLean_lean_ang = cosf(radians(AerLean_lean_ang_deg));
+    float AerLean_lean_ang_rad = radians(AerLean_lean_ang_deg);
+    float sin_AerLean_lean_ang = sinf(AerLean_lean_ang_rad);
+    float cos_AerLean_lean_ang = cosf(AerLean_lean_ang_rad);
 
     float AerLean_roll = gyro_latest.x * cos_AerLean_lean_ang + gyro_latest.z * sin_AerLean_lean_ang;
     float AerLean_yaw = -gyro_latest.x * sin_AerLean_lean_ang + gyro_latest.z * cos_AerLean_lean_ang;
