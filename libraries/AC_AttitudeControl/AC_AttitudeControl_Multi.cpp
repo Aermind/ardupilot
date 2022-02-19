@@ -334,14 +334,21 @@ void AC_AttitudeControl_Multi::rate_controller_run()
     _ang_vel_body += _sysid_ang_vel_body;
 
     Vector3f gyro_latest = _ahrs.get_gyro_latest();
+
+    float AerLean_lean_ang_deg = SRV_Channels::get_output_scaled(SRV_Channel::k_rcin8) / 50.0;
+    float sin_AerLean_lean_ang = sinf(radians(AerLean_lean_ang_deg));
+    float cos_AerLean_lean_ang = cosf(radians(AerLean_lean_ang_deg));
+
+    float AerLean_roll = gyro_latest.x * cos_AerLean_lean_ang + gyro_latest.z * sin_AerLean_lean_ang;
+    float AerLean_yaw = -gyro_latest.x * sin_AerLean_lean_ang + gyro_latest.z * cos_AerLean_lean_ang;
     
-    _motors.set_roll(get_rate_roll_pid().update_all(_ang_vel_body.x, gyro_latest.z, _motors.limit.roll) + _actuator_sysid.x); // AerLean note: gyro x goes to z
+    _motors.set_roll(get_rate_roll_pid().update_all(_ang_vel_body.x, AerLean_roll, _motors.limit.roll) + _actuator_sysid.x); // AerLean note: gyro x goes to z
     _motors.set_roll_ff(get_rate_roll_pid().get_ff());
 
     _motors.set_pitch(get_rate_pitch_pid().update_all(_ang_vel_body.y, gyro_latest.y, _motors.limit.pitch) + _actuator_sysid.y);
     _motors.set_pitch_ff(get_rate_pitch_pid().get_ff());
 
-    _motors.set_yaw(get_rate_yaw_pid().update_all(_ang_vel_body.z, -gyro_latest.x, _motors.limit.yaw) + _actuator_sysid.z); // AerLean note: gyro z goes to -x
+    _motors.set_yaw(get_rate_yaw_pid().update_all(_ang_vel_body.z, AerLean_yaw, _motors.limit.yaw) + _actuator_sysid.z); // AerLean note: gyro z goes to -x
     _motors.set_yaw_ff(get_rate_yaw_pid().get_ff()*_feedforward_scalar);
 
     _sysid_ang_vel_body.zero();
