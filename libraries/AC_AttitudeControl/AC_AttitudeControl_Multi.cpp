@@ -334,7 +334,12 @@ void AC_AttitudeControl_Multi::rate_controller_run()
     _ang_vel_body += _sysid_ang_vel_body;
 
     Vector3f gyro_latest = _ahrs.get_gyro_latest();
-    gcs().send_text(MAV_SEVERITY_INFO, "AerLean roll = %.2f,  pitch = %.2f,  yaw = %.2f", _ang_vel_body.x, _ang_vel_body.y, _ang_vel_body.z);
+
+    if ((AP_HAL::millis() - AerLean_timer) > 1000) {
+        gcs().send_text(MAV_SEVERITY_INFO, "AerLean roll = %.2f,  pitch = %.2f,  yaw = %.2f", _ang_vel_body.x, _ang_vel_body.y, _ang_vel_body.z);
+        AerLean_timer = AP_HAL::millis();
+    }
+    
     _motors.set_roll(get_rate_roll_pid().update_all(_ang_vel_body.x, gyro_latest.x, _motors.limit.roll) + _actuator_sysid.x);
     _motors.set_roll_ff(get_rate_roll_pid().get_ff());
 
