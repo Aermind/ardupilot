@@ -2033,10 +2033,22 @@ void QuadPlane::update(void)
         return;
     }
 
+    /* Commented out for AerLean, from here...
     if ((ahrs_view != NULL) && !is_equal(_last_ahrs_trim_pitch, ahrs_trim_pitch.get())) {
         _last_ahrs_trim_pitch = ahrs_trim_pitch.get();
         ahrs_view->set_pitch_trim(_last_ahrs_trim_pitch);
     }
+    ... to here, AerLean*/
+
+    // Modified block for AerLean, from here...
+    float AerLean_pitch_trim_deg = SRV_Channels::get_output_norm(SRV_Channel::k_rcin8) * 90.0;
+
+    if ((ahrs_view != NULL) && (fabs(_last_ahrs_trim_pitch - (ahrs_trim_pitch.get() + AerLean_pitch_trim_deg)) > 1.0)) {
+        _last_ahrs_trim_pitch = ahrs_trim_pitch.get() + AerLean_pitch_trim_deg;
+        ahrs_view->set_pitch_trim(_last_ahrs_trim_pitch);
+        gcs().send_text(MAV_SEVERITY_INFO, "Lean angle: %.0f", AerLean_pitch_trim_deg);
+    }
+    // ... to here, AerLean
 
 #if ADVANCED_FAILSAFE == ENABLED
     if (plane.afs.should_crash_vehicle() && !plane.afs.terminating_vehicle_via_landing()) {
