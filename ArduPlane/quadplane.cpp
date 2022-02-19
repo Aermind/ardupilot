@@ -2041,7 +2041,7 @@ void QuadPlane::update(void)
     ... to here, AerLean*/
 
     // Modified block for AerLean, from here...
-    float AerLean_pitch_trim_deg = SRV_Channels::get_output_norm(SRV_Channel::k_rcin8) * 90.0;
+    float AerLean_pitch_trim_deg = constrain_float(SRV_Channels::get_output_norm(SRV_Channel::k_rcin8), -0.25, 1) * 90.0;
 
     if ((ahrs_view != NULL) && !is_equal(_last_ahrs_trim_pitch, ahrs_trim_pitch.get() + AerLean_pitch_trim_deg)) {
         _last_ahrs_trim_pitch = ahrs_trim_pitch.get() + AerLean_pitch_trim_deg;
