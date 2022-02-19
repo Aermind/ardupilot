@@ -334,18 +334,14 @@ void AC_AttitudeControl_Multi::rate_controller_run()
     _ang_vel_body += _sysid_ang_vel_body;
 
     Vector3f gyro_latest = _ahrs.get_gyro_latest();
-
-    if (fabs(gyro_latest.x) > 0.5 || fabs(gyro_latest.y) > 0.5 || fabs(gyro_latest.z) > 0.5 || fabs(_ang_vel_body.x) > 1.0 || fabs(_ang_vel_body.y) > 1.0 || fabs(_ang_vel_body.z) > 1.0) {
-        gcs().send_text(MAV_SEVERITY_INFO, "AerLean roll = %.2f,  pitch = %.2f,  yaw = %.2f", _actuator_sysid.x, _actuator_sysid.y, _actuator_sysid.z);
-    }
     
-    _motors.set_roll(get_rate_roll_pid().update_all(_ang_vel_body.x, gyro_latest.x, _motors.limit.roll) + _actuator_sysid.x);
+    _motors.set_roll(get_rate_roll_pid().update_all(_ang_vel_body.x, gyro_latest.z, _motors.limit.roll) + _actuator_sysid.x); // AerLean note: gyro x goes to z
     _motors.set_roll_ff(get_rate_roll_pid().get_ff());
 
     _motors.set_pitch(get_rate_pitch_pid().update_all(_ang_vel_body.y, gyro_latest.y, _motors.limit.pitch) + _actuator_sysid.y);
     _motors.set_pitch_ff(get_rate_pitch_pid().get_ff());
 
-    _motors.set_yaw(get_rate_yaw_pid().update_all(_ang_vel_body.z, gyro_latest.z, _motors.limit.yaw) + _actuator_sysid.z);
+    _motors.set_yaw(get_rate_yaw_pid().update_all(_ang_vel_body.z, -gyro_latest.x, _motors.limit.yaw) + _actuator_sysid.z); // AerLean note: gyro z goes to -x
     _motors.set_yaw_ff(get_rate_yaw_pid().get_ff()*_feedforward_scalar);
 
     _sysid_ang_vel_body.zero();
