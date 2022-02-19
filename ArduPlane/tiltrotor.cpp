@@ -413,7 +413,7 @@ void QuadPlane::tiltrotor_vectoring(void)
         const float avg_roll_factor = 0.5;
         const float tilt_offset = constrain_float(yaw_out * cos_tilt + avg_roll_factor * roll_out * sin_tilt, -1, 1);
 
-        float AerLean_lean_out = SRV_Channels::get_output_scaled(SRV_Channel::k_rcin8) / 4500.0;
+        float AerLean_lean_out = SRV_Channels::get_output_norm(SRV_Channel::k_rcin8);
         float AerLean_lean_range = 90.0 / total_angle;
         float AerLean_lean_angle_deg = AerLean_lean_out * 90.0;
 
