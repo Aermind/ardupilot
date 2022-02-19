@@ -27,7 +27,7 @@ AP_AHRS_View::AP_AHRS_View(AP_AHRS &_ahrs, enum Rotation _rotation, float pitch_
 {
     switch (rotation) {
     case ROTATION_NONE:
-        y_angle = 90; //AerLean note: original value is "0"
+        y_angle = 0; //AerLean note: original value is "0"
         break;
     case ROTATION_PITCH_90:
         y_angle = 90;
@@ -85,7 +85,7 @@ void AP_AHRS_View::update(bool skip_ins_update)
 // return a smoothed and corrected gyro vector using the latest ins data (which may not have been consumed by the EKF yet)
 Vector3f AP_AHRS_View::get_gyro_latest(void) const {
     Vector3f gyro_latest = ahrs.get_gyro_latest();
-    gyro_latest.rotate(ROTATION_PITCH_90); // AerLean note: original input is "rotation"
+    gyro_latest.rotate(rotation); // AerLean note: original argument is "rotation"
     return gyro_latest;
 }
 
