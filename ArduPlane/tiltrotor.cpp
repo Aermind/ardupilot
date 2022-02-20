@@ -399,16 +399,19 @@ void QuadPlane::tiltrotor_vectoring(void)
         SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorRearRight,1000 * constrain_float(base_output + right,0,1));
         SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorRear,  1000 * constrain_float(base_output + mid,0,1));
     } else {
+        float AerLean_pitch_factor = tilt.fixed_gain;
         float AerLean_angle_offset_deg = -15.0;
-        float AerLean_pitch_factor = tailsitter.vectored_hover_gain;
         float AerLean_lean_out = constrain_float(SRV_Channels::get_output_norm(SRV_Channel::k_rcin8), -0.25, 1);
         float AerLean_lean_range = 90.0 / total_angle;
         float AerLean_lean_angle_deg = AerLean_lean_out * 90.0;
         float AerLean_pitch_out = constrain_float(motors->get_pitch() * AerLean_pitch_factor * sinf(radians(AerLean_lean_angle_deg + AerLean_angle_offset_deg)), -1, 1);
         float AerLean_pitch_range = zero_out;
 
-        float AerLean_yaw_factor = tailsitter.vectored_forward_gain;
-        float yaw_out = motors->get_yaw() * ((1.0 - AerLean_yaw_factor) * cosf(radians(AerLean_lean_angle_deg)) + AerLean_yaw_factor);
+        float AerLean_front_yaw_factor = tailsitter.vectored_forward_gain;
+        float AerLean_back_yaw_factor = tailsitter.vectored_hover_gain;
+        float yaw_out = motors->get_yaw();
+        float AerLean_front_yaw_out = yaw_out * ((1.0 - AerLean_front_yaw_factor) * cosf(radians(AerLean_lean_angle_deg)) + AerLean_front_yaw_factor);
+        float AerLean_back_yaw_out = yaw_out * ((1.0 - AerLean_back_yaw_factor) * cosf(radians(AerLean_lean_angle_deg)) + AerLean_back_yaw_factor);
         const float roll_out = motors->get_roll();
         float yaw_range = zero_out;
 
@@ -420,13 +423,14 @@ void QuadPlane::tiltrotor_vectoring(void)
         // we need to use the same factor here to keep the same roll
         // gains when tilted as we have when not tilted
         const float avg_roll_factor = 0.5;
-        const float tilt_offset = constrain_float(yaw_out * cos_tilt + avg_roll_factor * roll_out * sin_tilt, -1, 1);
+        float AerLean_front_tilt_offset = constrain_float(AerLean_front_yaw_out * cos_tilt + avg_roll_factor * roll_out * sin_tilt, -1, 1);
+        float AerLean_back_tilt_offset = constrain_float(AerLean_back_yaw_out * cos_tilt + avg_roll_factor * roll_out * sin_tilt, -1, 1);
 
-        SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorLeft,  1000 * constrain_float(base_output + (AerLean_lean_out * AerLean_lean_range) - (AerLean_pitch_out * AerLean_pitch_range) + (tilt_offset * yaw_range),0,1));
-        SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorRight, 1000 * constrain_float(base_output + (AerLean_lean_out * AerLean_lean_range) - (AerLean_pitch_out * AerLean_pitch_range) - (tilt_offset * yaw_range),0,1));
+        SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorLeft,  1000 * constrain_float(base_output + (AerLean_lean_out * AerLean_lean_range) - (AerLean_pitch_out * AerLean_pitch_range) + (AerLean_front_tilt_offset * yaw_range),0,1));
+        SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorRight, 1000 * constrain_float(base_output + (AerLean_lean_out * AerLean_lean_range) - (AerLean_pitch_out * AerLean_pitch_range) - (AerLean_front_tilt_offset * yaw_range),0,1));
         SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorRear,  1000 * constrain_float(base_output,0,1));
-        SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorRearLeft,  1000 * constrain_float(base_output + (AerLean_lean_out * AerLean_lean_range) + (tilt_offset * yaw_range),0,1));
-        SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorRearRight, 1000 * constrain_float(base_output + (AerLean_lean_out * AerLean_lean_range) - (tilt_offset * yaw_range),0,1));
+        SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorRearLeft,  1000 * constrain_float(base_output + (AerLean_lean_out * AerLean_lean_range) + (AerLean_back_tilt_offset * yaw_range),0,1));
+        SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorRearRight, 1000 * constrain_float(base_output + (AerLean_lean_out * AerLean_lean_range) - (AerLean_back_tilt_offset * yaw_range),0,1));
         
         if ((AP_HAL::millis() - AerLean_timer) > 1000) {
             gcs().send_text(MAV_SEVERITY_INFO, "Lean angle: %.0f", AerLean_lean_angle_deg);
