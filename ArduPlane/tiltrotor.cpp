@@ -399,7 +399,7 @@ void QuadPlane::tiltrotor_vectoring(void)
         SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorRearRight,1000 * constrain_float(base_output + right,0,1));
         SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorRear,  1000 * constrain_float(base_output + mid,0,1));
     } else {
-        float AerLean_pitch_factor = tilt.fixed_gain;
+        float AerLean_pitch_factor = tailsitter.vectored_forward_gain;
         float AerLean_angle_offset_deg = -15.0;
         float AerLean_lean_out = constrain_float(SRV_Channels::get_output_norm(SRV_Channel::k_rcin8), -0.25, 1);
         float AerLean_lean_range = 90.0 / total_angle;
@@ -407,11 +407,11 @@ void QuadPlane::tiltrotor_vectoring(void)
         float AerLean_pitch_out = constrain_float(motors->get_pitch() * AerLean_pitch_factor * sinf(radians(AerLean_lean_angle_deg + AerLean_angle_offset_deg)), -1, 1);
         float AerLean_pitch_range = zero_out;
 
-        float AerLean_front_yaw_factor = tailsitter.vectored_forward_gain;
-        float AerLean_back_yaw_factor = tailsitter.vectored_hover_gain;
+        float AerLean_yaw_factor = tailsitter.vectored_hover_gain;
         float yaw_out = motors->get_yaw();
-        float AerLean_front_yaw_out = yaw_out * ((1.0 - AerLean_front_yaw_factor) * cosf(radians(AerLean_lean_angle_deg)) + AerLean_front_yaw_factor);
-        float AerLean_back_yaw_out = yaw_out * ((1.0 - AerLean_back_yaw_factor) * cosf(radians(AerLean_lean_angle_deg)) + AerLean_back_yaw_factor);
+        float cos_AerLean_lean = cosf(radians(AerLean_lean_angle_deg));
+        float AerLean_front_yaw_out = yaw_out * ((1.0 - AerLean_yaw_factor) * cos_AerLean_lean + AerLean_yaw_factor);
+        float AerLean_back_yaw_out = yaw_out * cos_AerLean_lean;
         const float roll_out = motors->get_roll();
         float yaw_range = zero_out;
 
