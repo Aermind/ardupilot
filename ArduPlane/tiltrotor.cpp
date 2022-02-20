@@ -425,8 +425,8 @@ void QuadPlane::tiltrotor_vectoring(void)
         SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorLeft,  1000 * constrain_float(base_output + (AerLean_lean_out * AerLean_lean_range) - (AerLean_pitch_out * AerLean_pitch_range) + (tilt_offset * yaw_range),0,1));
         SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorRight, 1000 * constrain_float(base_output + (AerLean_lean_out * AerLean_lean_range) - (AerLean_pitch_out * AerLean_pitch_range) - (tilt_offset * yaw_range),0,1));
         SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorRear,  1000 * constrain_float(base_output,0,1));
-        SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorRearLeft,  1000 * constrain_float(base_output + (AerLean_lean_out * AerLean_lean_range) + (AerLean_pitch_out * AerLean_pitch_range) + (tilt_offset * yaw_range),0,1));
-        SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorRearRight, 1000 * constrain_float(base_output + (AerLean_lean_out * AerLean_lean_range) + (AerLean_pitch_out * AerLean_pitch_range) - (tilt_offset * yaw_range),0,1));
+        SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorRearLeft,  1000 * constrain_float(base_output + (AerLean_lean_out * AerLean_lean_range) + (tilt_offset * yaw_range),0,1));
+        SRV_Channels::set_output_scaled(SRV_Channel::k_tiltMotorRearRight, 1000 * constrain_float(base_output + (AerLean_lean_out * AerLean_lean_range) - (tilt_offset * yaw_range),0,1));
         
         if ((AP_HAL::millis() - AerLean_timer) > 1000) {
             gcs().send_text(MAV_SEVERITY_INFO, "Lean angle: %.0f", AerLean_lean_angle_deg);
