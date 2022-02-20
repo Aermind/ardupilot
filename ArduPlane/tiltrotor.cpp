@@ -410,8 +410,8 @@ void QuadPlane::tiltrotor_vectoring(void)
         float AerLean_yaw_factor = tailsitter.vectored_hover_gain;
         float yaw_out = motors->get_yaw();
         float cos_AerLean_lean = cosf(radians(AerLean_lean_angle_deg));
-        float AerLean_front_yaw_out = yaw_out * ((1.0 - AerLean_yaw_factor) * cos_AerLean_lean + AerLean_yaw_factor);
-        float AerLean_back_yaw_out = yaw_out * cos_AerLean_lean;
+        float AerLean_front_yaw_out = yaw_out * cos_AerLean_lean;
+        float AerLean_back_yaw_out = yaw_out * ((1.0 - AerLean_yaw_factor) * cos_AerLean_lean + AerLean_yaw_factor);
         const float roll_out = motors->get_roll();
         float yaw_range = zero_out;
 
