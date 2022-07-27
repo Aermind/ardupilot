@@ -415,6 +415,8 @@ void QuadPlane::tiltrotor_vectoring(void)
         const float roll_out = motors->get_roll();
         float yaw_range = zero_out;
 
+        //test
+
         // now apply vectored thrust for yaw and roll.
         const float tilt_rad = radians(tilt.current_tilt*90);
         const float sin_tilt = sinf(tilt_rad);
