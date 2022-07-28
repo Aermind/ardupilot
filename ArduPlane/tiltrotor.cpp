@@ -415,7 +415,7 @@ void QuadPlane::tiltrotor_vectoring(void)
         const float roll_out = motors->get_roll();
         float yaw_range = zero_out;
 
-        float AerLean_drive_out = plane.channel_pitch->norm_input();
+        float AerLean_drive_out = constrain_float(plane.channel_pitch->norm_input(), -1, 1);
         float AerLean_drive_range = zero_out;
 
         // now apply vectored thrust for yaw and roll.
