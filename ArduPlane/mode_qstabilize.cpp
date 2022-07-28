@@ -21,7 +21,7 @@ void ModeQStabilize::update()
     // be correct for tailsitters, so get_control_in() must be used instead.
     // normalize control_input to [-1,1]
     const float roll_input = (float)plane.channel_roll->get_control_in() / plane.channel_roll->get_range();
-    const float pitch_input = (float)plane.channel_pitch->get_control_in() / plane.channel_pitch->get_range();
+    const float pitch_input = 0; //(float)plane.channel_pitch->get_control_in() / plane.channel_pitch->get_range(); // For AerLean Drive
 
     // then scale to target angles in centidegrees
     if (plane.quadplane.tailsitter_active()) {
