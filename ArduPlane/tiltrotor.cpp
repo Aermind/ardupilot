@@ -418,7 +418,7 @@ void QuadPlane::tiltrotor_vectoring(void)
         float AerLean_drive_out = constrain_float(plane.channel_pitch->norm_input(), -1, 1);
         float AerLean_drive_range = zero_out;
 
-        // now apply vectored thrust for yaw and roll
+        // now apply vectored thrust for yaw and roll.
         const float tilt_rad = radians(tilt.current_tilt*90);
         const float sin_tilt = sinf(tilt_rad);
         const float cos_tilt = cosf(tilt_rad);
