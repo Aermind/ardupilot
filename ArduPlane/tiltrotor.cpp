@@ -407,6 +407,8 @@ void QuadPlane::tiltrotor_vectoring(void)
         float AerLean_pitch_out = constrain_float(motors->get_pitch() * AerLean_pitch_factor * sinf(radians(AerLean_lean_angle_deg + AerLean_angle_offset_deg)), -1, 1);
         float AerLean_pitch_range = zero_out;
 
+        // test
+
         float AerLean_yaw_factor = tailsitter.vectored_hover_gain;
         float yaw_out = motors->get_yaw();
         float cos_AerLean_lean = cosf(radians(AerLean_lean_angle_deg));
