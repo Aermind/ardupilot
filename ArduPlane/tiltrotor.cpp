@@ -500,8 +500,7 @@ bool Tiltrotor::fully_fwd(void) const
 }
 
 /*
-  return true if the rotors are fully tilted up.
-
+  return true if the rotors are fully tilted up
  */
 bool Tiltrotor::fully_up(void) const
 {
