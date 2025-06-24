@@ -254,7 +254,7 @@ void Plane::aerhart_servo_control_update()
     float C = 0.103218f * airspeed_m_s * airspeed_m_s - 1.05967f * airspeed_m_s + 1514.52f;
     float b = 0.0000702125f * airspeed_m_s * airspeed_m_s - 0.00159508f * airspeed_m_s + 0.0367758f;
 
-    float pwm_output = C * powf(rssi_input, b);
+    float pwm_output = C;// *powf(rssi_input, b);
     pwm_output = constrain_float(pwm_output, 1000.0f, 2000.0f);
 
     hal.rcout->write(6, (uint16_t)pwm_output);
