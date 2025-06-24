@@ -172,7 +172,7 @@ void Plane::ahrs_update()
 
     float airspeed_m_s = fabsf(airspeed.get_airspeed());
     float voltage_v = fabsf(battery.voltage(0));
-    float rssi_idk = 0.02073f * voltage_v - 0.12444f;
+    float rssi_idk = 0.02057f * voltage_v - 0.1232f;
 
     float C = 0.103218f * airspeed_m_s * airspeed_m_s - 1.05967f * airspeed_m_s + 1514.52f;
     float b = 0.0000702125f * airspeed_m_s * airspeed_m_s - 0.00159508f * airspeed_m_s + 0.0367758f;
