@@ -168,6 +168,24 @@ void Plane::ahrs_update()
 
     ahrs.update();
 
+    // === Aerhart Custom Servo Logic for AerFold ===
+
+    float airspeed_m_s = airspeed.get_airspeed();  // processed airspeed in m/s
+    float rssi_input = hal.rcin->get_rssi() / 100.0f;  // scaled analog input
+
+    // Compute C and b
+    float C = 0.103218f * airspeed_m_s * airspeed_m_s - 1.05967f * airspeed_m_s + 1514.52f;
+    float b = 0.0000702125f * airspeed_m_s * airspeed_m_s - 0.00159508f * airspeed_m_s + 0.0367758f;
+
+    // Calculate PWM output using your formula
+    float pwm_output = C * powf(rssi_input, b);
+
+    // Constrain PWM to safe range (adjust limits based on your servo specs)
+    pwm_output = constrain_float(pwm_output, 1000.0f, 2000.0f);
+
+    // Output to Servo 7 (index 6)
+    hal.rcout->write(6, (uint16_t)pwm_output);
+
 #if HAL_LOGGING_ENABLED
     if (should_log(MASK_LOG_IMU)) {
         AP::ins().Write_IMU();
@@ -319,24 +337,6 @@ void Plane::one_second_loop()
 {
     // make it possible to change control channel ordering at runtime
     set_control_channels();
-
-    // === Aerhart Custom Servo Logic for AerFold ===
-
-    float airspeed_m_s = airspeed.get_airspeed();  // processed airspeed in m/s
-    float rssi_input = hal.rcin->get_rssi() / 100.0f;  // scaled analog input
-
-    // Compute C and b
-    float C = 0.103218f * airspeed_m_s * airspeed_m_s - 1.05967f * airspeed_m_s + 1514.52f;
-    float b = 0.0000702125f * airspeed_m_s * airspeed_m_s - 0.00159508f * airspeed_m_s + 0.0367758f;
-
-    // Calculate PWM output using your formula
-    float pwm_output = C * powf(rssi_input, b);
-
-    // Constrain PWM to safe range (adjust limits based on your servo specs)
-    pwm_output = constrain_float(pwm_output, 1000.0f, 2000.0f);
-
-    // Output to Servo 7 (index 6)
-    hal.rcout->write(6, (uint16_t)pwm_output);
 
 #if HAL_WITH_IO_MCU
     iomcu.setup_mixing(&rcmap, g.override_channel.get(), g.mixing_gain, g2.manual_rc_mask);
