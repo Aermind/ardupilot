@@ -170,21 +170,20 @@ void Plane::ahrs_update()
 
     // === Aerhart Custom Servo Logic for AerFold ===
 
-    float airspeed_m_s = airspeed.get_airspeed();  // processed airspeed in m/s
-    float rssi_input = hal.rcin->get_rssi() / 100.0f;  // scaled analog input
+    if (AP_HAL::millis() - last_print_ms > 1000) {  // Every 1 second
+        last_print_ms = AP_HAL::millis();
 
-    // Compute C and b
-    float C = 0.103218f * airspeed_m_s * airspeed_m_s - 1.05967f * airspeed_m_s + 1514.52f;
-    float b = 0.0000702125f * airspeed_m_s * airspeed_m_s - 0.00159508f * airspeed_m_s + 0.0367758f;
+        float airspeed_m_s = airspeed.get_airspeed();
+        float rssi_input = hal.rcin->get_rssi() / 100.0f;
 
-    // Calculate PWM output using your formula
-    float pwm_output = C * powf(rssi_input, b);
+        float C = 0.103218f * airspeed_m_s * airspeed_m_s - 1.05967f * airspeed_m_s + 1514.52f;
+        float b = 0.0000702125f * airspeed_m_s * airspeed_m_s - 0.00159508f * airspeed_m_s + 0.0367758f;
 
-    // Constrain PWM to safe range (adjust limits based on your servo specs)
-    pwm_output = constrain_float(pwm_output, 1000.0f, 2000.0f);
+        float pwm_output = C * powf(rssi_input, b);
+        pwm_output = constrain_float(pwm_output, 1000.0f, 2000.0f);
 
-    // Output to Servo 7 (index 6)
-    hal.rcout->write(6, (uint16_t)pwm_output);
+        printf("Airspeed: %.2f | RSSI: %.2f | PWM: %.2f\n", airspeed_m_s, rssi_input, pwm_output);
+    }
 
 #if HAL_LOGGING_ENABLED
     if (should_log(MASK_LOG_IMU)) {
