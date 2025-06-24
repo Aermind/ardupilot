@@ -171,7 +171,7 @@ void Plane::ahrs_update()
     // === Aerhart Custom Servo Logic for AerFold ===
 
     float airspeed_m_s = airspeed.get_airspeed();
-    float rssi_input = hal.rcin->get_rssi() / 100.0f;
+    float rssi_input = hal.rcin->get_rssi() / 1.0f;
 
     float C = 0.103218f * airspeed_m_s * airspeed_m_s - 1.05967f * airspeed_m_s + 1514.52f;
     float b = 0.0000702125f * airspeed_m_s * airspeed_m_s - 0.00159508f * airspeed_m_s + 0.0367758f;
