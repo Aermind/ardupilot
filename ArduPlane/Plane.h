@@ -1026,7 +1026,6 @@ private:
                              uint32_t &log_bit) override;
     void ahrs_update();
     void update_speed_height(void);
-    void aerhart_servo_control_update(void);
     void update_GPS_50Hz(void);
     void update_GPS_10Hz(void);
     void update_compass(void);

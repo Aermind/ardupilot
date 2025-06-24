@@ -4,6 +4,12 @@
     <Filter Include="ArduPlane">
       <UniqueIdentifier>{5d6d5780-463f-45e7-a118-de66835ad4f5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Libraries">
+      <UniqueIdentifier>{dd57ea21-1b3f-4fcc-9200-8191b1a77d2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Libraries\SRV_Channel">
+      <UniqueIdentifier>{6b99e280-34d8-472c-ae67-c3c6971f7402}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ArduPlane\afs_plane.cpp">
@@ -189,6 +195,15 @@
     <ClCompile Include="ArduPlane\tuning.cpp">
       <Filter>ArduPlane</Filter>
     </ClCompile>
+    <ClCompile Include="libraries\SRV_Channel\SRV_Channel.cpp">
+      <Filter>Libraries\SRV_Channel</Filter>
+    </ClCompile>
+    <ClCompile Include="libraries\SRV_Channel\SRV_Channel_aux.cpp">
+      <Filter>Libraries\SRV_Channel</Filter>
+    </ClCompile>
+    <ClCompile Include="libraries\SRV_Channel\SRV_Channels.cpp">
+      <Filter>Libraries\SRV_Channel</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArduPlane\afs_plane.h">
@@ -247,6 +262,12 @@
     </ClInclude>
     <ClInclude Include="ArduPlane\version.h">
       <Filter>ArduPlane</Filter>
+    </ClInclude>
+    <ClInclude Include="libraries\SRV_Channel\SRV_Channel.h">
+      <Filter>Libraries\SRV_Channel</Filter>
+    </ClInclude>
+    <ClInclude Include="libraries\SRV_Channel\SRV_Channel_config.h">
+      <Filter>Libraries\SRV_Channel</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
