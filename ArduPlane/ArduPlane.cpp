@@ -249,10 +249,10 @@ void Plane::aerhart_servo_control_update()
     }
 
     float airspeed_m_s = airspeed.get_airspeed();
-    float rssi_input = hal.rcin->get_rssi() / 100.0f;  // Normalize to 0.0 - 1.0
+    //float rssi_input = hal.rcin->get_rssi() / 100.0f;  // Normalize to 0.0 - 1.0
 
     float C = 0.103218f * airspeed_m_s * airspeed_m_s - 1.05967f * airspeed_m_s + 1514.52f;
-    float b = 0.0000702125f * airspeed_m_s * airspeed_m_s - 0.00159508f * airspeed_m_s + 0.0367758f;
+    //float b = 0.0000702125f * airspeed_m_s * airspeed_m_s - 0.00159508f * airspeed_m_s + 0.0367758f;
 
     float pwm_output = C;// *powf(rssi_input, b);
     pwm_output = constrain_float(pwm_output, 1000.0f, 2000.0f);
