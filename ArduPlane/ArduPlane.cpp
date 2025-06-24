@@ -170,6 +170,7 @@ void Plane::ahrs_update()
 
     // === Aerhart Custom Servo Logic for AerFold ===
 
+    static uint32_t last_print_ms = 0;
     if (AP_HAL::millis() - last_print_ms > 1000) {  // Every 1 second
         last_print_ms = AP_HAL::millis();
 
