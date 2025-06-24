@@ -259,8 +259,12 @@ void Plane::aerhart_servo_control_update()
 
     hal.rcout->write(6, (uint16_t)pwm_output);
 
-    // Optional Debug
-    printf("Airspeed: %.2f | RSSI: %.2f | PWM: %.2f\n", airspeed_m_s, rssi_input, pwm_output);
+    // Throttle debug print to once per second
+    static uint32_t last_print_time = 0;
+    if (AP_HAL::millis() - last_print_time > 1000) {
+        printf("Airspeed: %.2f | RSSI: %.2f | PWM: %.2f\n", airspeed_m_s, rssi_input, pwm_output);
+        last_print_time = AP_HAL::millis();
+    }
 }
 
 
