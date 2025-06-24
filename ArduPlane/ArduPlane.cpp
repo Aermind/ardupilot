@@ -234,13 +234,13 @@ void Plane::update_speed_height(void)
         quadplane.update_throttle_mix();
     }
 #endif
-
+    /*
 
     // === Aerhart AerFold Custom Servo 7 Logic ===
 
     // === Loop Rate Stability Check ===
     const float loop_rate = AP::scheduler().get_filtered_loop_rate_hz();
-
+    /*
     if (loop_rate > 40.0f) {  // Expect ~50Hz, add margin for noise
     
         float airspeed_m_s = airspeed.get_airspeed();  // processed airspeed in m/s
@@ -263,7 +263,7 @@ void Plane::update_speed_height(void)
         hal.rcout->write(6, (uint16_t)pwm_output);
     
     }
-
+    */
 }
 
 
