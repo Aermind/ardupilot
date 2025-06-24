@@ -234,6 +234,27 @@ void Plane::update_speed_height(void)
         quadplane.update_throttle_mix();
     }
 #endif
+
+
+    // === Aerhart AerFold Custom Servo 7 Logic ===
+
+    float airspeed_m_s = airspeed.get_airspeed();  // processed airspeed in m/s
+    float rssi = hal.rcin->get_rssi();             // scaled 0-100% analog input
+
+    // Compute C and b
+    float C = 0.103218f * airspeed_m_s * airspeed_m_s - 1.05967f * airspeed_m_s + 1514.52f;
+    float b = 0.0000702125f * airspeed_m_s * airspeed_m_s - 0.00159508f * airspeed_m_s + 0.0367758f;
+
+    // Calculate PWM output using your formula
+    float pwm_output = C * powf(rssi, b);
+
+    // Constrain PWM to safe range (adjust limits based on your servo specs)
+    pwm_output = constrain_float(pwm_output, 1000.0f, 2000.0f);
+
+    // Output to Servo 7 (index 6)
+    hal.rcout->write(6, (uint16_t)pwm_output);
+
+
 }
 
 
