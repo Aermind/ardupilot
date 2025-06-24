@@ -178,9 +178,9 @@ void Plane::ahrs_update()
 
     float pwm_output = 2000.0f * C * b * rssi_input; // powf(rssi_input, b);
     pwm_output = constrain_float(pwm_output, 1000.0f, 2000.0f);
-    hal.rcout->write(5, (uint16_t)(rssi_input/10.0f));
+
     hal.rcout->write(6, (uint16_t)pwm_output);
-    hal.rcout->write(7, (uint16_t)(-pwm_output*100.0f));
+
 #if HAL_LOGGING_ENABLED
     if (should_log(MASK_LOG_IMU)) {
         AP::ins().Write_IMU();
