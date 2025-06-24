@@ -238,22 +238,31 @@ void Plane::update_speed_height(void)
 
     // === Aerhart AerFold Custom Servo 7 Logic ===
 
-    float airspeed_m_s = airspeed.get_airspeed();  // processed airspeed in m/s
-    float rssi_input = hal.rcin->get_rssi() / 100.0f;  // scaled 0-100% analog input
+    // === Loop Rate Stability Check ===
+    const float loop_rate = AP::scheduler().get_filtered_loop_rate_hz();
 
-    // Compute C and b
-    float C = 0.103218f * airspeed_m_s * airspeed_m_s - 1.05967f * airspeed_m_s + 1514.52f;
-    float b = 0.0000702125f * airspeed_m_s * airspeed_m_s - 0.00159508f * airspeed_m_s + 0.0367758f;
+    if (loop_rate > 40.0f) {  // Expect ~50Hz, add margin for noise
+    
+        float airspeed_m_s = airspeed.get_airspeed();  // processed airspeed in m/s
+        float rssi_input = hal.rcin->get_rssi() / 100.0f;  // scaled 0-100% analog input
 
-    // Calculate PWM output using your formula
-    float pwm_output = C * powf(rssi_input, b);
+        // Compute C and b
+        float C = 0.103218f * airspeed_m_s * airspeed_m_s - 1.05967f * airspeed_m_s + 1514.52f;
+        float b = 0.0000702125f * airspeed_m_s * airspeed_m_s - 0.00159508f * airspeed_m_s + 0.0367758f;
 
-    // Constrain PWM to safe range (adjust limits based on your servo specs)
-    pwm_output = constrain_float(pwm_output, 1000.0f, 2000.0f);
+        // Calculate PWM output using your formula
+        float pwm_output = C * powf(rssi_input, b);
 
-    // Output to Servo 7 (index 6)
-    hal.rcout->write(6, (uint16_t)pwm_output);
+        // Constrain PWM to safe range (adjust limits based on your servo specs)
+        pwm_output = constrain_float(pwm_output, 1000.0f, 2000.0f);
 
+        printf("Loop Rate: %.2f Hz | Airspeed: %.2f | RSSI: %.2f | PWM: %.2f\n",
+            loop_rate, airspeed_m_s, rssi_input, pwm_output);
+
+        // Output to Servo 7 (index 6)
+        hal.rcout->write(6, (uint16_t)pwm_output);
+    
+    }
 
 }
 
