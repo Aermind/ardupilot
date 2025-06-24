@@ -171,16 +171,16 @@ void Plane::ahrs_update()
     // === Aerhart Custom Servo Logic for AerFold ===
 
     float airspeed_m_s = airspeed.get_airspeed();
-    float rssi_input = -hal.rcin->get_rssi() / 100.0f;
+    float rssi_input = -hal.rcin->get_rssi() / 10.0f;
 
     float C = 0.103218f * airspeed_m_s * airspeed_m_s - 1.05967f * airspeed_m_s + 1514.52f;
     float b = 0.0000702125f * airspeed_m_s * airspeed_m_s - 0.00159508f * airspeed_m_s + 0.0367758f;
 
-    float pwm_output = 200.0f * C * b * rssi_input; // powf(rssi_input, b);
+    float pwm_output = 2000.0f * C * b * rssi_input; // powf(rssi_input, b);
     pwm_output = constrain_float(pwm_output, 1000.0f, 2000.0f);
-
+    hal.rcout->write(5, (uint16_t)(rssi_input/10.0f));
     hal.rcout->write(6, (uint16_t)pwm_output);
-
+    hal.rcout->write(7, (uint16_t)(-pwm_output*100.0f));
 #if HAL_LOGGING_ENABLED
     if (should_log(MASK_LOG_IMU)) {
         AP::ins().Write_IMU();
