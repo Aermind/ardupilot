@@ -71,6 +71,7 @@ const AP_Scheduler::Task Plane::scheduler_tasks[] = {
     SCHED_TASK(calc_airspeed_errors,   10,    100,  42),
     SCHED_TASK(update_alt,             10,    200,  45),
     SCHED_TASK(adjust_altitude_target, 10,    200,  48),
+    SCHED_TASK(aerhart_servo_control_update, 20, 100, 155),
 #if AP_ADVANCEDFAILSAFE_ENABLED
     SCHED_TASK(afs_fs_check,           10,    100,  51),
 #endif
@@ -234,37 +235,34 @@ void Plane::update_speed_height(void)
         quadplane.update_throttle_mix();
     }
 #endif
-    /*
-
-    // === Aerhart AerFold Custom Servo 7 Logic ===
-
-    // === Loop Rate Stability Check ===
-    const float loop_rate = AP::scheduler().get_filtered_loop_rate_hz();
-    /*
-    if (loop_rate > 40.0f) {  // Expect ~50Hz, add margin for noise
     
-        float airspeed_m_s = airspeed.get_airspeed();  // processed airspeed in m/s
-        float rssi_input = hal.rcin->get_rssi() / 100.0f;  // scaled 0-100% analog input
-
-        // Compute C and b
-        float C = 0.103218f * airspeed_m_s * airspeed_m_s - 1.05967f * airspeed_m_s + 1514.52f;
-        float b = 0.0000702125f * airspeed_m_s * airspeed_m_s - 0.00159508f * airspeed_m_s + 0.0367758f;
-
-        // Calculate PWM output using your formula
-        float pwm_output = C * powf(rssi_input, b);
-
-        // Constrain PWM to safe range (adjust limits based on your servo specs)
-        pwm_output = constrain_float(pwm_output, 1000.0f, 2000.0f);
-
-        printf("Loop Rate: %.2f Hz | Airspeed: %.2f | RSSI: %.2f | PWM: %.2f\n",
-            loop_rate, airspeed_m_s, rssi_input, pwm_output);
-
-        // Output to Servo 7 (index 6)
-        hal.rcout->write(6, (uint16_t)pwm_output);
-    
-    }
-    */
 }
+
+
+void Plane::aerhart_servo_control_update()
+{
+    const float loop_rate = AP::scheduler().get_filtered_loop_rate_hz();
+
+    if (loop_rate < 40.0f) {
+        // Wait for timing stability, avoids early system faults
+        return;
+    }
+
+    float airspeed_m_s = airspeed.get_airspeed();
+    float rssi_input = hal.rcin->get_rssi() / 100.0f;  // Normalize to 0.0 - 1.0
+
+    float C = 0.103218f * airspeed_m_s * airspeed_m_s - 1.05967f * airspeed_m_s + 1514.52f;
+    float b = 0.0000702125f * airspeed_m_s * airspeed_m_s - 0.00159508f * airspeed_m_s + 0.0367758f;
+
+    float pwm_output = C * powf(rssi_input, b);
+    pwm_output = constrain_float(pwm_output, 1000.0f, 2000.0f);
+
+    hal.rcout->write(6, (uint16_t)pwm_output);
+
+    // Optional Debug
+    printf("Airspeed: %.2f | RSSI: %.2f | PWM: %.2f\n", airspeed_m_s, rssi_input, pwm_output);
+}
+
 
 
 /*
