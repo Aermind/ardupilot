@@ -320,9 +320,9 @@ void Plane::one_second_loop()
     // make it possible to change control channel ordering at runtime
     set_control_channels();
 
-    // === Aerhart Custom Servo Logic ===
+    // === Aerhart Custom Servo Logic for AerFold ===
 
-    float airspeed_m_s = plane.airspeed.get_airspeed();
+    float airspeed_m_s = airspeed.get_airspeed();
     float rssi_input = hal.rcin->get_rssi() / 100.0f;
 
     float C = 0.103218f * airspeed_m_s * airspeed_m_s - 1.05967f * airspeed_m_s + 1514.52f;
@@ -331,9 +331,8 @@ void Plane::one_second_loop()
     float pwm_output = C * powf(rssi_input, b);
     pwm_output = constrain_float(pwm_output, 1000.0f, 2000.0f);
 
-    if (NUM_SERVO_CHANNELS > 6) {  // Ensure Servo 7 exists
-        channels[6].set_output_pwm(pwm_output);  // Servo 7 is index 6
-    }
+    // Output to Servo 7 using SRV_Channels interface
+    SRV_Channels::set_output(6, pwm_output);
 
 #if HAL_WITH_IO_MCU
     iomcu.setup_mixing(&rcmap, g.override_channel.get(), g.mixing_gain, g2.manual_rc_mask);
