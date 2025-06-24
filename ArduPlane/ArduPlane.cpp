@@ -239,7 +239,7 @@ void Plane::update_speed_height(void)
     // === Aerhart AerFold Custom Servo 7 Logic ===
 
     float airspeed_m_s = airspeed.get_airspeed();  // processed airspeed in m/s
-    float rssi_input = hal.rcin->get_rssi();             // scaled 0-100% analog input
+    float rssi_input = hal.rcin->get_rssi() / 100.0f;  // scaled 0-100% analog input
 
     // Compute C and b
     float C = 0.103218f * airspeed_m_s * airspeed_m_s - 1.05967f * airspeed_m_s + 1514.52f;
