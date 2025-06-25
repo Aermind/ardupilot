@@ -187,7 +187,7 @@ void Plane::ahrs_update()
 
     pwm_output = pwm_output - smash_function;
 
-    float srvo_trim_pwm = SRV_Channels::get_singleton()->get_trim(6);
+    float trim_pwm = SRV_Channels::get_singleton()->channel(6)->get_trim();
 
     pwm_output = pwm_output + srvo_trim_pwm - 1500.0f;
 
