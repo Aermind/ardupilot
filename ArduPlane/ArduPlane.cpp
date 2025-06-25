@@ -182,6 +182,11 @@ void Plane::ahrs_update()
     float C = 0.0705013f * airspeed_m_s * airspeed_m_s - 0.241214f * airspeed_m_s + 1505.02f;
 
     float pwm_output = M * logf(rssi_spoof) + C;
+
+    float smash_function = 500.0f * ((0.0909f * airspeed_m_s - 3.5656f) * rssi_spoof * rssi_spoof + 0.8f * rssi_spoof);
+
+    pwm_output = pwm_output - smash_function;
+
     pwm_output = constrain_float(pwm_output, 1000.0f, 2000.0f);
 
     hal.rcout->write(6, (uint16_t)pwm_output);
