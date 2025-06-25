@@ -187,6 +187,10 @@ void Plane::ahrs_update()
 
     pwm_output = pwm_output - smash_function;
 
+    float srvo_trim_pwm = SRV_Channels::get_singleton()->get_trim(6);
+
+    pwm_output = pwm_output + srvo_trim_pwm - 1500.0f;
+
     pwm_output = constrain_float(pwm_output, 1000.0f, 2000.0f);
 
     hal.rcout->write(6, (uint16_t)pwm_output);
