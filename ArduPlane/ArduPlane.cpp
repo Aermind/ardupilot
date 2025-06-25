@@ -183,7 +183,7 @@ void Plane::ahrs_update()
 
     float pwm_output = M * logf(rssi_spoof) + C;
 
-    float smash_function = 500.0f * ((0.0909f * airspeed_m_s - 3.5656f) * rssi_spoof * rssi_spoof + 0.8f * rssi_spoof);
+    float smash_function = 300.0f * ((0.0909f * airspeed_m_s - 3.5656f) * rssi_spoof * rssi_spoof + 0.8f * rssi_spoof);
 
     pwm_output = pwm_output - smash_function;
 
