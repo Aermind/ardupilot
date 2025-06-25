@@ -170,14 +170,18 @@ void Plane::ahrs_update()
 
     // === Aerhart Custom Servo Logic for AerFold ===
 
-    float airspeed_m_s = fabsf(airspeed.get_airspeed());
-    float voltage_v = fabsf(battery.voltage(0));
-    float rssi_idk = 0.02057f * voltage_v - 0.1232f;
+    float airspeed_m_s = airspeed.get_airspeed();
+    float bat_voltage_v = battery.voltage(0);
+    float rssi_spoof = 0.020624f * bat_voltage_v - 0.123538f;
 
-    float C = 0.103218f * airspeed_m_s * airspeed_m_s - 1.05967f * airspeed_m_s + 1514.52f;
-    float b = 0.0000702125f * airspeed_m_s * airspeed_m_s - 0.00159508f * airspeed_m_s + 0.0367758f;
+    if (rssi_spoof < 0.001f) {
+        rssi_spoof = 0.001f;
+    }
 
-    float pwm_output = C * powf(rssi_idk, b);
+    float M = 0.090124f * airspeed_m_s * airspeed_m_s - 1.951323f * airspeed_m_s + 49.0977f;
+    float C = 0.0705013f * airspeed_m_s * airspeed_m_s - 0.241214f * airspeed_m_s + 1505.02f;
+
+    float pwm_output = M * logf(rssi_spoof) + C;
     pwm_output = constrain_float(pwm_output, 1000.0f, 2000.0f);
 
     hal.rcout->write(6, (uint16_t)pwm_output);
